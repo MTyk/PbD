@@ -89,12 +89,13 @@ void assistanceStopped(const std_msgs::Empty msg);
 std_srvs::Empty empty;
 
 int counter = 0;
+int item_type;
+int item_msg_type;
 string bagfile = "stiffness";
 string bagdir =
 		"/home/intelligentrobotics/ws/pbd/Applications/bagfiles/experiments/assistance/";
-string bagtopic = "/iros/pbd/dmp/JointPos";
-;
-string bagtopic2 = "";
+string bagtopic;
+string bagtopic2;
 
 vector<double> start_pos;
 bool start_pos_recorded = false;
@@ -120,6 +121,27 @@ int main(int argc, char **argv) {
 
 	KUKACommander::set_bool set_bool_true;
 	set_bool_true.request.activate = true;
+	
+	/* switch(item_type){
+		//joints
+		case 0:{
+			bagtopic = "/iros/pbd/dmp/JointPos";
+			bagtopic2 = "";
+			break;
+		}	
+		//pose
+		case 2:{
+			bagtopic = "/iros/pbd/dmp/CartPose";
+			bagtopic2 = "";
+			break;
+		}		
+		//poseforce
+		case 3:{
+			bagtopic = "/iros/pbd/dmp/CartPose";
+			bagtopic2 = "/iros/pbd/dmp/FTForce";
+			break;
+		}
+	}	 */
 
 	// Create service clients to communicate with the KUKACommander
 	ros::ServiceClient activateGravityCompensation = nh.serviceClient<
@@ -454,7 +476,7 @@ int imitate(NodeHandle& nh, ros::ServiceClient& setControlModeClient,
  */
 unique_ptr<BaseImitator> initializeImitator(NodeHandle & nh) {
 // Read in parameters, use default ones if not available
-	bagfile = getParamDefault(nh, "bagfile/name", string("stiffness"));
+	/* bagfile = getParamDefault(nh, "bagfile/name", string("stiffness"));
 	bagdir =
 			getParamDefault(nh, "bagfile/directory",
 					string(
@@ -468,8 +490,15 @@ unique_ptr<BaseImitator> initializeImitator(NodeHandle & nh) {
 	double stiffness = getParamDefault(nh, "learning/stiffness", 2000.0);
 	int item_type = getParamDefault(nh, "item/type", 0);
 	int item_msg_type = getParamDefault(nh, "item/msg_type", 0);
-	bool cyclic = getParamDefault(nh, "cyclic", false);
-
+	bool cyclic = getParamDefault(nh, "cyclic", false); */
+	
+	double exp_start = 1.0;
+	double exp_decay = 1.1;
+	int num_kernels = 250;
+	double stiffness = 2000;
+	
+	
+	
 // Create canonical objects for discrete/cyclic motions
 	Canonical* canonical;
 	if (cyclic)
