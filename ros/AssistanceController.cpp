@@ -1,6 +1,10 @@
 /*
  * AssistanceController.cpp
- *
+ * 
+ *  Handles the incremental learning. Provides assistance in two ways. 
+ *  If PROACTIVE is false, stiffness will be very low during replaying the skill.
+ *  If PROACTIVE is true, the orocos component ProactiveAssistance is started.
+ *  No start with launchfile possible, as SigInts can't be handeled then.
  *  Created on: Apr 19, 2015
  *      Author: Martin Tykal
  */
@@ -112,37 +116,15 @@ unique_ptr<BaseImitator> imitator;
 int state = Start;
 
 int main(int argc, char **argv) {
-	//ros::init(argc, argv, "iros/pbd/dmp/", ros::init_options::NoSigintHandler); // Define namespace
 	ros::init(argc, argv, "AC");
 	ROS_INFO("AssistanceController");
 
-//	signal(SIGTERM,sigHandle);
+	//	signal(SIGTERM,sigHandle);
 	ros::NodeHandle nh { "AssistanceController" };
 
 	KUKACommander::set_bool set_bool_true;
 	set_bool_true.request.activate = true;
 	
-	/* switch(item_type){
-		//joints
-		case 0:{
-			bagtopic = "/iros/pbd/dmp/JointPos";
-			bagtopic2 = "";
-			break;
-		}	
-		//pose
-		case 2:{
-			bagtopic = "/iros/pbd/dmp/CartPose";
-			bagtopic2 = "";
-			break;
-		}		
-		//poseforce
-		case 3:{
-			bagtopic = "/iros/pbd/dmp/CartPose";
-			bagtopic2 = "/iros/pbd/dmp/FTForce";
-			break;
-		}
-	}	 */
-
 	// Create service clients to communicate with the KUKACommander
 	ros::ServiceClient activateGravityCompensation = nh.serviceClient<
 			KUKACommander::set_bool>(
@@ -165,6 +147,7 @@ int main(int argc, char **argv) {
 	SimpleActionClient<EmptyAction> execution_stop {
 			"/iros/pbd/dmp/execution/interface/stop", true };
 
+	// Topics to communicate with ProactiveAssistance		
 	start_assistance = nh.advertise<std_msgs::Empty>(
 			"/iros/pbd/assistanceStart", 1, true);
 	stop_assistance = nh.advertise<std_msgs::Empty>("/iros/pbd/assistanceStop",
@@ -468,29 +451,12 @@ int imitate(NodeHandle& nh, ros::ServiceClient& setControlModeClient,
 
 }
 /**
- * Initializes the Imitator depening on the launch file. A global Imitator is important
- * to avoid errors from second iteration on. Error would be that uninitialized methods
- * are called.
+ * Initializes the Imitator depening on item_type and item_msg_type. A global Imitator is important
+ * to avoid errors in learning from second iteration on (demonstration already learned).
  * @param nh
  * @return
  */
 unique_ptr<BaseImitator> initializeImitator(NodeHandle & nh) {
-// Read in parameters, use default ones if not available
-	/* bagfile = getParamDefault(nh, "bagfile/name", string("stiffness"));
-	bagdir =
-			getParamDefault(nh, "bagfile/directory",
-					string(
-							"/home/intelligentrobotics/ws/pbd/Applications/bagfiles/experiments/assistance/"));
-	bagtopic = getParamDefault(nh, "bagfile/topic",
-			string("/iros/pbd/dmp/JointPos"));
-	bagtopic2 = getParamDefault(nh, "bagfile/topic2", string(""));
-	double exp_start = getParamDefault(nh, "canonical/exponential/start", 1.0);
-	double exp_decay = getParamDefault(nh, "canonical/exponential/decay", 1.1);
-	int num_kernels = getParamDefault(nh, "learning/num_kernels", 250);
-	double stiffness = getParamDefault(nh, "learning/stiffness", 2000.0);
-	int item_type = getParamDefault(nh, "item/type", 0);
-	int item_msg_type = getParamDefault(nh, "item/msg_type", 0);
-	bool cyclic = getParamDefault(nh, "cyclic", false); */
 	
 	double exp_start = 1.0;
 	double exp_decay = 1.1;
@@ -579,28 +545,9 @@ unique_ptr<BaseImitator> initializeImitator(NodeHandle & nh) {
 	}
 	return imitator;
 }
-/**
- *  Helper function to read parameters
- *  The type of the default value defines the type of the return value
- */
-template<typename T>
-T getParamDefault(NodeHandle& nh, string name, T defaultval) {
-	T val;
-	if (!nh.getParam(name, val)) {
-//		ROS_INFO_STREAM(
-//				"Parameter " << name << " not found, using default value: " << defaultval);
-		val = defaultval;
-	} else {
-//		ROS_INFO_STREAM("Parameter " << name << " set to: " << val);
-	}
-	return val;
-}
 
 void record_start_pos(const sensor_msgs::JointState::ConstPtr& jnt_state) {
 	start_pos = jnt_state->position;
-//	ROS_INFO("START POSITION");
-//	for (double d : start_pos)
-//		ROS_INFO("%f", d);
 	start_pos_recorded = true;
 }
 //Callback functions
