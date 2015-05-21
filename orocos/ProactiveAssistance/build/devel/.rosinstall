@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/build/devel/setup.sh

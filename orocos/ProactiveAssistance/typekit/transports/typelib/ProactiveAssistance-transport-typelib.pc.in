@@ -1,0 +1,18 @@
+# Generated from orogen/lib/orogen/templates/typekit/typelib/transport-typelib.pc 
+
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${prefix}/lib/orocos@OROCOS_PKG_DIR@/types
+includedir=${prefix}/include/orocos
+
+project_name=ProactiveAssistance
+
+type_registry=@TYPEKIT_REGISTRY@
+
+Name: ProactiveAssistanceTypelibTransport
+Version: 
+
+Description: ProactiveAssistance types support for the Orocos type system
+Libs: -L${libdir} -l@libname_typelib@
+Cflags: -I${includedir}
+

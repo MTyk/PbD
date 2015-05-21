@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<typelib>
+  <numeric name="/double" category="float" size="8"/>
+  <numeric name="/int8_t" category="sint" size="1"/>
+  <alias name="/char" source="/int8_t"/>
+  <alias name="/signed char" source="/int8_t"/>
+  <container name="/std/string" of="/int8_t" size="8" kind="/std/string"/>
+  <container name="/std/vector&lt;/double&gt;" of="/double" size="24" kind="/std/vector"/>
+  <compound name="/ProactiveAssistanceData" size="24" source_id="/home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/include/ProactiveAssistance/ProactiveAssistance-types.hpp">
+    <field name="samples" type="/std/vector&lt;/double&gt;" offset="0"/>
+  </compound>
+</typelib>

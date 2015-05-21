@@ -1,0 +1,112 @@
+import("rtt_rosnode")
+import("lwr_fri")
+import("kuka_lwr_fri")
+import("KUKACommander")
+import("FTSensor")
+import("ProactiveAssistance");
+import("Execution")
+
+loadComponent("FRIServer", "lwr_fri::FRIServerRT")
+loadComponent("FTSensor", "iros::FTSensor")
+loadComponent("KUKACommander", "iros::KUKACommander")
+loadComponent("KUKACommanderROS", "iros::KUKACommanderROS")
+loadComponent("ProactiveAssistance", "iros::ProactiveAssistance")
+loadComponent("ExecutionController", "iros::orocos::pbd::dmp::execution::Controller")
+
+// Not periodic, highest priority, real-time scheduler
+//setActivity("FRIServer", 0.001, HighestPriority, ORO_SCHED_RT)
+setActivity("FRIServer", 0, HighestPriority, ORO_SCHED_RT)
+FRIServer.udp_port=49938
+
+
+// 1000Hz, highest priority, real-time scheduler
+setActivity("FTSensor", 0, HighestPriority, ORO_SCHED_RT)
+
+setActivity("KUKACommander", 0, 70, ORO_SCHED_RT)
+setActivity("KUKACommanderROS", 0.01, 50, ORO_SCHED_RT)
+setActivity("ProactiveAssistance", 0.005, 70, ORO_SCHED_RT)
+
+addPeer("KUKACommanderROS", "KUKACommander")
+addPeer("ProactiveAssistance", "KUKACommander")
+
+// Standard connection policy
+var ConnPolicy cp
+cp.type = DATA
+
+// Connection between FRIServer and KUKACommander
+connect("FRIServer.fromKRL", "KUKACommander.fromKRL", cp)
+connect("FRIServer.toKRL", "KUKACommander.toKRL", cp)
+
+connect("FRIServer.FRIState", "KUKACommander.FRIState", cp)
+connect("FRIServer.RobotState", "KUKACommander.RobotState", cp)
+
+connect("FRIServer.desJntImpedance", "KUKACommander.desJntImpedance", cp)
+connect("FRIServer.desCartImpedance", "KUKACommander.desCartImpedance", cp)
+
+connect("ExecutionController.desState", "KUKAInterface.desState", cp)
+connect("KUKAInterface.msrState", "ExecutionController.msrState", cp)
+connect("ExecutionController.desStartState", "KUKAInterface.start_state", cp)
+
+connect("FRIServer.msrJointState", "KUKACommander.msrJointState", cp)
+connect("FRIServer.msrCartPos", "KUKACommander.msrCartPos", cp)
+connect("FRIServer.msrExtCartWrench", "KUKACommander.msrExtCartWrench", cp)
+
+connect("KUKACommander.desiredJntPos", "FRIServer.desJntPos", cp)
+connect("KUKACommander.desiredJntVel", "FRIServer.desJntVel", cp)
+connect("KUKACommander.desiredCartPos", "FRIServer.desCartPos", cp)
+connect("KUKACommander.desCartForce", "FRIServer.desAddTcpWrench", cp)
+connect("KUKACommander.desJntForce", "FRIServer.desAddJntTrq", cp)
+
+connect("FRIServer.counter", "FTSensor.Trigger", cp)
+
+//ProactiveAssistance Ports
+connect("FRIServer.counter", "ProactiveAssistance.counter", cp)
+
+connect("FTSensor.ForcePort", "ProactiveAssistance.msrForce", cp)
+connect("FTSensor.TorquePort", "ProactiveAssistance.msrTorque", cp)
+
+connect("ProactiveAssistance.desCartPosition", "FRIServer.desCartPos", cp)
+connect("FRIServer.msrCartPos", "ProactiveAssistance.msrCartPosition", cp)
+connect("ProactiveAssistance.desAddJntTrq", "FRIServer.desAddJntTrq", cp)
+connect("FRIServer.msrExtJointTorque", "ProactiveAssistance.msrExtJointTorque", cp)
+
+connect("ProactiveAssistance.desKUKAWrench", "FRIServer.desAddTcpWrench", cp)
+connect("FRIServer.msrExtCartWrench", "ProactiveAssistance.msrKUKAWrench", cp)
+
+connect("FRIServer.FRIState", "KUKAInterface.friState", cp)
+connect("KUKAInterface.prepared", "ExecutionController.in_prepared", cp)
+connect("KUKAInterface.start_pos_reached", "ExecutionController.in_start_pos_reached", cp)
+
+stream("FRIServer.msrJointState", ros.topic("/iros/pbd/dmp/JointPos")) 
+
+stream("ExecutionController.out_prepared", ros.topic("/iros/pbd/dmp/execution/interface/prepared"))
+stream("ExecutionController.out_finished", ros.topic("/iros/pbd/dmp/execution/interface/finished"))
+stream("ExecutionController.out_start_pos_reached", ros.topic("/iros/pbd/dmp/execution/interface/start_pos_reached"))
+
+stream("ExecutionController.prepare", ros.topic("/iros/pbd/dmp/execution/interface/prepare"))
+stream("ExecutionController.start", ros.topic("/iros/pbd/dmp/execution/interface/start"))
+stream("ExecutionController.stop", ros.topic("/iros/pbd/dmp/execution/interface/stop"))
+stream("ExecutionController.startPosition", ros.topic("/iros/pbd/dmp/execution/interface/startPosition"))
+
+stream("ProactiveAssistance.startAssistance", ros.topic("/iros/pbd/assistanceStart"));
+stream("ProactiveAssistance.outStarted",ros.topic("/iros/pbd/assistanceStarted"));
+stream("ProactiveAssistance.stopAssistance", ros.topic("/iros/pbd/assistanceStop"));
+stream("ProactiveAssistance.outStopped", ros.topic("/iros/pbd/assistanceStopped"));	
+
+
+// call configure
+FRIServer.configure()
+FTSensor.configure()
+KUKACommander.configure()
+KUKACommanderROS.configure()
+ProactiveAssistance.configure()
+ExecutionController.configure()
+
+
+// Start the server
+FRIServer.start()
+FTSensor.start()
+KUKACommander.start()
+KUKACommanderROS.start()
+ExecutionController.start()
+ProactiveAssistance.start()

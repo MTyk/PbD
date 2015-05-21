@@ -1,0 +1,11 @@
+prefix=/usr/local
+libdir=${prefix}/lib
+includedir=${prefix}/include/orocos
+orocos_libdir=${libdir}/orocos/xenomai/ProactiveAssistance
+
+Name: ProactiveAssistance-xenomai
+Description: ProactiveAssistance-xenomai package for Orocos
+Requires: orocos-rtt-xenomai 
+Version: 1.0
+Libs:  -L${orocos_libdir}/types  -lProactiveAssistance-typekit-xenomai
+Cflags: -I${includedir}

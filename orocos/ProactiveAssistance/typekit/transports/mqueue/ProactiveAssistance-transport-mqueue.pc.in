@@ -1,0 +1,18 @@
+# Generated from orogen/lib/orogen/templates/typekit/mqueue/transport-mqueue.pc
+
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${prefix}/lib/orocos@OROCOS_PKG_DIR@/types
+includedir=${prefix}/include/orocos
+
+project_name=ProactiveAssistance
+
+type_registry=${prefix}/share/orogen/ProactiveAssistance.tlb
+
+Name: ProactiveAssistanceMQueueTransport
+Version: 
+
+Description: ProactiveAssistance types support for the Orocos type system
+Libs: -L${libdir} -l@libname_mqueue@
+Cflags: -I${includedir}
+
