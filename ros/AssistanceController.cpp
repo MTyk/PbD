@@ -64,7 +64,7 @@ using namespace iros::pbd::dmp::execution;
 
 namespace cmd = ::boost::process;
 
-#define PROACTIVE false
+#define PROACTIVE true
 
 typedef enum {
 	Start, Record, Learn, Execute, End, GravityComp, Replay
@@ -93,8 +93,8 @@ void assistanceStopped(const std_msgs::Empty msg);
 std_srvs::Empty empty;
 
 int counter = 0;
-int item_type;
-int item_msg_type;
+int item_type = 0;
+int item_msg_type = 0;
 string bagfile = "stiffness";
 string bagdir =
 		"/home/intelligentrobotics/ws/pbd/Applications/bagfiles/experiments/assistance/";
@@ -124,6 +124,27 @@ int main(int argc, char **argv) {
 
 	KUKACommander::set_bool set_bool_true;
 	set_bool_true.request.activate = true;
+
+	switch(item_type){
+		//joints
+		case 0:{
+			bagtopic = "/iros/pbd/dmp/JointPos";
+			bagtopic2 = "";
+			break;
+		}	
+		//pose
+		case 2:{
+			bagtopic = "/iros/pbd/dmp/CartPose";
+			bagtopic2 = "";
+			break;
+		}		
+		//poseforce
+		case 3:{
+			bagtopic = "/iros/pbd/dmp/CartPose";
+			bagtopic2 = "/iros/pbd/dmp/FTForce";
+			break;
+		}
+	}	
 	
 	// Create service clients to communicate with the KUKACommander
 	ros::ServiceClient activateGravityCompensation = nh.serviceClient<
@@ -462,7 +483,7 @@ unique_ptr<BaseImitator> initializeImitator(NodeHandle & nh) {
 	double exp_decay = 1.1;
 	int num_kernels = 250;
 	double stiffness = 2000;
-	
+	bool cyclic = false;
 	
 	
 // Create canonical objects for discrete/cyclic motions

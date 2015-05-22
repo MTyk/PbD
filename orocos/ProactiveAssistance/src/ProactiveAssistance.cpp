@@ -5,8 +5,8 @@
 #include "geometry_msgs/Vector3.h"
 #include <std_msgs/Float32.h>
 
-#define TORQUE_GAIN 0.001
-#define FORCE_GAIN 0.01
+#define TORQUE_GAIN 0.005   //0.015
+#define FORCE_GAIN 0.01	//0.013
 #define NUMJOINTS 7
 
 namespace iros {
@@ -111,8 +111,8 @@ bool ProactiveAssistance::configureHook() {
 	geometry_msgs::Vector3 stiff;
 
 	for (int i = 0; i < NUMJOINTS; i++) {
-		stiffness[i] = 20;
-		damping[i] = 0.7;
+		stiffness[i] = 0;
+		damping[i] = 1.0;
 	}
 
 	log(Debug) << "ProactiveAssistance configured !" << endlog();
@@ -127,7 +127,7 @@ bool ProactiveAssistance::startHook() {
 
 void ProactiveAssistance::updateHook() {
 	if (isStarted) {
-		log(Info) << "ProactiveAssistance executes updateHook !" << endlog();
+		Logger::In in((this->getName()));
 		port_msr_position.read(current_pose);
 		port_force.read(current_force);
 		port_torque.read(current_torque);
@@ -141,7 +141,6 @@ void ProactiveAssistance::updateHook() {
 			if (!control_mode_set) {
 				log(Info) << "Setting impedance" << endlog();
 				setJointImpedance(stiffness, damping);
-//			setCartesianImpedance(stiffness, damping);
 				log(Info) << "Setting control mode and state" << endlog();
 				setControlMode(FRI_CTRL_CART_IMP, FRI_STATE_CMD);
 				control_mode_set = true;
@@ -186,13 +185,13 @@ void ProactiveAssistance::updateHook() {
 		static KDL::Rotation last_cmd_rot = current_rot;
 
 		//Torque
-		log(Info) << "Setting efforts"
-				<< current_jnt_trq.msrJntTrq[0] * TORQUE_GAIN << endlog();
-		motion_control_msgs::JointEfforts add_jnt_trq;
-		for (int i = 0; i < add_jnt_trq.efforts.size(); i++) {
-			add_jnt_trq.efforts[i] = current_jnt_trq.msrJntTrq[i] * TORQUE_GAIN;
-			log(Info) << "effort: " << add_jnt_trq.efforts[i] << endlog();
-		}
+//		log(Info) << "Setting efforts"
+//				<< current_jnt_trq.msrJntTrq[0] * TORQUE_GAIN << endlog();
+//		motion_control_msgs::JointEfforts add_jnt_trq;
+//		for (int i = 0; i < add_jnt_trq.efforts.size(); i++) {
+//			add_jnt_trq.efforts[i] = current_jnt_trq.msrJntTrq[i] * TORQUE_GAIN;
+//			log(Info) << "effort: " << add_jnt_trq.efforts[i] << endlog();
+//		}
 
 		double torque_gain = TORQUE_GAIN;
 		double alpha_t = 0.8;
@@ -212,24 +211,27 @@ void ProactiveAssistance::updateHook() {
 		//TODO: Check order of RPY
 //	KDL::Rotation torque_rot = KDL::Rotation::RPY(-filtered_t_z * torque_gain,
 //			-filtered_t_x * torque_gain, -filtered_t_y * torque_gain);
+
+		// yep, filterered_t_y needs to be minus, so that the x-axis of the tool
+		// rotates right. Weird, but it works
 		KDL::Rotation torque_rot = KDL::Rotation::RPY(
-				-filtered_t_x * torque_gain, filtered_t_y * torque_gain,
-				-filtered_t_z * torque_gain);
+				filtered_t_x * torque_gain, -filtered_t_y * torque_gain,
+				filtered_t_z * torque_gain);
 		double r, p, y, ir, ip, iy;
 		current_rot.GetRPY(r, p, y);
 		initial_rot.GetRPY(ir, ip, iy);
 
-		log(Info) << "Current rot R " << r << " P " << p << " Y " << y
-				<< endlog();
-		log(Info) << "Initial rot R " << ir << " P " << ip << " Y " << iy
-				<< endlog();
+//		log(Info) << "Current rot R " << r << " P " << p << " Y " << y
+//				<< endlog();
+//		log(Info) << "Initial rot R " << ir << " P " << ip << " Y " << iy
+//				<< endlog();
 		double x, z, w, ix, iz, iw;
 		current_rot.GetQuaternion(x, y, z, w);
 		initial_rot.GetQuaternion(ix, iy, iz, iw);
-		log(Info) << "Current rot x " << x << " y " << y << " z " << z << " w "
-				<< w << endlog();
-		log(Info) << "Initial rot x " << ix << " y " << iy << " z " << iz
-				<< " w " << iw << endlog();
+//		log(Info) << "Current rot x " << x << " y " << y << " z " << z << " w "
+//				<< w << endlog();
+//		log(Info) << "Initial rot x " << ix << " y " << iy << " z " << iz
+//				<< " w " << iw << endlog();
 
 		KDL::Rotation cmd_rot = last_cmd_rot * torque_rot;
 

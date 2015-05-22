@@ -88,10 +88,10 @@ stream("ExecutionController.start", ros.topic("/iros/pbd/dmp/execution/interface
 stream("ExecutionController.stop", ros.topic("/iros/pbd/dmp/execution/interface/stop"))
 stream("ExecutionController.startPosition", ros.topic("/iros/pbd/dmp/execution/interface/startPosition"))
 
-stream("ProactiveAssistance.startAssistance", ros.topic("/iros/pbd/assistanceStart"));
-stream("ProactiveAssistance.outStarted",ros.topic("/iros/pbd/assistanceStarted"));
-stream("ProactiveAssistance.stopAssistance", ros.topic("/iros/pbd/assistanceStop"));
-stream("ProactiveAssistance.outStopped", ros.topic("/iros/pbd/assistanceStopped"));	
+stream("ProactiveAssistance.assistanceStart", ros.topic("/iros/pbd/assistanceStart"));
+stream("ProactiveAssistance.assistanceStarted",ros.topic("/iros/pbd/assistanceStarted"));
+stream("ProactiveAssistance.assistanceStop", ros.topic("/iros/pbd/assistanceStop"));
+stream("ProactiveAssistance.assistanceStopped", ros.topic("/iros/pbd/assistanceStopped"));	
 
 
 // call configure
