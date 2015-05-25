@@ -808,24 +808,24 @@ clean: src/CMakeFiles/ProactiveAssistance.dir/clean
 # Convenience name for "all" pass in the directory.
 typekit/all: typekit/CMakeFiles/ProactiveAssistance-typekit-xenomai.dir/all
 typekit/all: typekit/CMakeFiles/check-typekit-uptodate.dir/all
+typekit/all: typekit/transports/typelib/all
 typekit/all: typekit/transports/corba/all
 typekit/all: typekit/transports/mqueue/all
-typekit/all: typekit/transports/typelib/all
 .PHONY : typekit/all
 
 # Convenience name for "clean" pass in the directory.
 typekit/clean: typekit/CMakeFiles/ProactiveAssistance-typekit-xenomai.dir/clean
 typekit/clean: typekit/CMakeFiles/check-typekit-uptodate.dir/clean
 typekit/clean: typekit/CMakeFiles/regen.dir/clean
+typekit/clean: typekit/transports/typelib/clean
 typekit/clean: typekit/transports/corba/clean
 typekit/clean: typekit/transports/mqueue/clean
-typekit/clean: typekit/transports/typelib/clean
 .PHONY : typekit/clean
 
 # Convenience name for "preinstall" pass in the directory.
+typekit/preinstall: typekit/transports/typelib/preinstall
 typekit/preinstall: typekit/transports/corba/preinstall
 typekit/preinstall: typekit/transports/mqueue/preinstall
-typekit/preinstall: typekit/transports/typelib/preinstall
 .PHONY : typekit/preinstall
 
 #=============================================================================
@@ -930,6 +930,56 @@ clean: typekit/CMakeFiles/regen.dir/clean
 .PHONY : clean
 
 #=============================================================================
+# Directory level rules for directory typekit/transports/typelib
+
+# Convenience name for "all" pass in the directory.
+typekit/transports/typelib/all: typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/all
+.PHONY : typekit/transports/typelib/all
+
+# Convenience name for "clean" pass in the directory.
+typekit/transports/typelib/clean: typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/clean
+.PHONY : typekit/transports/typelib/clean
+
+# Convenience name for "preinstall" pass in the directory.
+typekit/transports/typelib/preinstall:
+.PHONY : typekit/transports/typelib/preinstall
+
+#=============================================================================
+# Target rules for target typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir
+
+# All Build rule for target.
+typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/all:
+	$(MAKE) -f typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/build.make typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/depend
+	$(MAKE) -f typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/build.make typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/build/CMakeFiles  12 13 14
+	@echo "Built target ProactiveAssistance-transport-typelib-xenomai"
+.PHONY : typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/all
+
+# Include target in all.
+all: typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/all
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/build/CMakeFiles 3
+	$(MAKE) -f CMakeFiles/Makefile2 typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/build/CMakeFiles 0
+.PHONY : typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/rule
+
+# Convenience name for target.
+ProactiveAssistance-transport-typelib-xenomai: typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/rule
+.PHONY : ProactiveAssistance-transport-typelib-xenomai
+
+# clean rule for target.
+typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/clean:
+	$(MAKE) -f typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/build.make typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/clean
+.PHONY : typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/clean
+
+# clean rule for target.
+clean: typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/clean
+.PHONY : clean
+
+#=============================================================================
 # Directory level rules for directory typekit/transports/corba
 
 # Convenience name for "all" pass in the directory.
@@ -1028,56 +1078,6 @@ typekit/transports/mqueue/CMakeFiles/ProactiveAssistance-transport-mqueue-xenoma
 
 # clean rule for target.
 clean: typekit/transports/mqueue/CMakeFiles/ProactiveAssistance-transport-mqueue-xenomai.dir/clean
-.PHONY : clean
-
-#=============================================================================
-# Directory level rules for directory typekit/transports/typelib
-
-# Convenience name for "all" pass in the directory.
-typekit/transports/typelib/all: typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/all
-.PHONY : typekit/transports/typelib/all
-
-# Convenience name for "clean" pass in the directory.
-typekit/transports/typelib/clean: typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/clean
-.PHONY : typekit/transports/typelib/clean
-
-# Convenience name for "preinstall" pass in the directory.
-typekit/transports/typelib/preinstall:
-.PHONY : typekit/transports/typelib/preinstall
-
-#=============================================================================
-# Target rules for target typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir
-
-# All Build rule for target.
-typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/all:
-	$(MAKE) -f typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/build.make typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/depend
-	$(MAKE) -f typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/build.make typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/build/CMakeFiles  12 13 14
-	@echo "Built target ProactiveAssistance-transport-typelib-xenomai"
-.PHONY : typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/all
-
-# Include target in all.
-all: typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/all
-.PHONY : all
-
-# Build rule for subdir invocation for target.
-typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/build/CMakeFiles 3
-	$(MAKE) -f CMakeFiles/Makefile2 typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/build/CMakeFiles 0
-.PHONY : typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/rule
-
-# Convenience name for target.
-ProactiveAssistance-transport-typelib-xenomai: typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/rule
-.PHONY : ProactiveAssistance-transport-typelib-xenomai
-
-# clean rule for target.
-typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/clean:
-	$(MAKE) -f typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/build.make typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/clean
-.PHONY : typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/clean
-
-# clean rule for target.
-clean: typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/clean
 .PHONY : clean
 
 #=============================================================================

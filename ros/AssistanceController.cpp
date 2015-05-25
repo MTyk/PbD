@@ -1,6 +1,7 @@
 /*
  * AssistanceController.cpp
  * 
+ *  Two arguments: item_type and item_msg_type
  *  Handles the incremental learning. Provides assistance in two ways. 
  *  If PROACTIVE is false, stiffness will be very low during replaying the skill.
  *  If PROACTIVE is true, the orocos component ProactiveAssistance is started.
@@ -93,8 +94,8 @@ void assistanceStopped(const std_msgs::Empty msg);
 std_srvs::Empty empty;
 
 int counter = 0;
-int item_type = 0;
-int item_msg_type = 0;
+int item_type;
+int item_msg_type;
 string bagfile = "stiffness";
 string bagdir =
 		"/home/intelligentrobotics/ws/pbd/Applications/bagfiles/experiments/assistance/";
@@ -118,7 +119,13 @@ int state = Start;
 int main(int argc, char **argv) {
 	ros::init(argc, argv, "AC");
 	ROS_INFO("AssistanceController");
-
+	ROS_INFO("Argc: %d", argc);
+	if(argc==3){
+		item_type = atoi(argv[1]);
+		item_msg_type = atoi(argv[2]);
+	}else{
+		ROS_ERROR("Please give the item_type and item_msg_type as arguments!");
+	}
 	//	signal(SIGTERM,sigHandle);
 	ros::NodeHandle nh { "AssistanceController" };
 
@@ -248,6 +255,8 @@ int main(int argc, char **argv) {
 			rosbag_cmd.append(" " + bagtopic);
 			rosbag_cmd.append(" " + bagtopic2);
 
+			ROS_INFO("Rosbag_cmd: %s", rosbag_cmd.c_str());
+
 			signal(SIGINT, SIG_IGN);
 			cmd::child rosbag_shell = cmd::launch_shell(rosbag_cmd, ctx);
 			ROS_INFO(" ");
@@ -376,10 +385,11 @@ int imitate(NodeHandle& nh, ros::ServiceClient& setControlModeClient,
 
 // Wait for ActionSevers to be setup
 
-	if (!execution_start_client.waitForServer(ros::Duration(2.0))
-			|| !execution_start_client.waitForServer(ros::Duration(2.0))
-			|| !execution_start_client.waitForServer(ros::Duration(2.0))) {
+	if(!execution_start_client.waitForServer(ros::Duration(2.0)) ||
+		!execution_prepare_client.waitForServer(ros::Duration(2.0)) ||
+		!execution_start_pos_client.waitForServer(ros::Duration(2.0))) {
 		ROS_ERROR("Execution server not ready");
+		spinner.stop();
 		return 0;
 	}
 
@@ -417,6 +427,7 @@ int imitate(NodeHandle& nh, ros::ServiceClient& setControlModeClient,
 		rosbag_cmd.append(" " + bagtopic);
 		rosbag_cmd.append(" " + bagtopic2);
 
+		ROS_INFO("Rosbag_cmd: %s",rosbag_cmd.c_str());
 		signal(SIGINT, SIG_IGN);
 		rosbag_shell = cmd::launch_shell(rosbag_cmd, ctx);
 		ROS_INFO(" ");
@@ -480,9 +491,9 @@ int imitate(NodeHandle& nh, ros::ServiceClient& setControlModeClient,
 unique_ptr<BaseImitator> initializeImitator(NodeHandle & nh) {
 	
 	double exp_start = 1.0;
-	double exp_decay = 1.1;
+	double exp_decay = 3.0;
 	int num_kernels = 250;
-	double stiffness = 2000;
+	double stiffness = 50;
 	bool cyclic = false;
 	
 	
@@ -495,6 +506,7 @@ unique_ptr<BaseImitator> initializeImitator(NodeHandle & nh) {
 
 // Ugly switch/case construct to create pointer to imitator object, depending on given parameters
 	unique_ptr<BaseImitator> imitator { };
+	ROS_INFO("Item_type: %d Item_msg_type: %d", item_type, item_msg_type);
 	switch (item_type) {
 	case 0:
 		switch (item_msg_type) {
@@ -502,12 +514,14 @@ unique_ptr<BaseImitator> initializeImitator(NodeHandle & nh) {
 			imitator.reset(
 					new JointsImitator(bagdir, bagfile, bagtopic, bagtopic2,
 							num_kernels, canonical, stiffness, 250, cyclic));
+			ROS_INFO("JointsImitator created");
 			break;
 		}
 		case 1: {
 			imitator.reset(
 					new JointsImitator2(bagdir, bagfile, bagtopic, bagtopic2,
 							num_kernels, canonical, stiffness, 250, cyclic));
+			ROS_INFO("JointsImitator2 created");
 			break;
 		}
 		default: {
@@ -523,6 +537,7 @@ unique_ptr<BaseImitator> initializeImitator(NodeHandle & nh) {
 					new PositionImitatorPoint(bagdir, bagfile, bagtopic,
 							bagtopic2, num_kernels, canonical, stiffness, 250,
 							cyclic));
+			ROS_INFO("PositionImitatorPoint created");
 			break;
 		}
 		case 3: {
@@ -530,6 +545,7 @@ unique_ptr<BaseImitator> initializeImitator(NodeHandle & nh) {
 					new PositionImitatorPose(bagdir, bagfile, bagtopic,
 							bagtopic2, num_kernels, canonical, stiffness, 250,
 							cyclic));
+			ROS_INFO("PositionImitatorPose created");
 			break;
 		}
 		default: {
@@ -546,6 +562,7 @@ unique_ptr<BaseImitator> initializeImitator(NodeHandle & nh) {
 			imitator.reset(
 					new PoseImitator(bagdir, bagfile, bagtopic, bagtopic2,
 							num_kernels, canonical, stiffness, 250, cyclic));
+			ROS_INFO("PoseImitator created");
 			break;
 		}
 		break;
@@ -557,6 +574,7 @@ unique_ptr<BaseImitator> initializeImitator(NodeHandle & nh) {
 			imitator.reset(
 					new PoseForceZImitator(bagdir, bagfile, bagtopic, bagtopic2,
 							num_kernels, canonical, stiffness, 250, cyclic));
+			ROS_INFO("PoseForceZImitator created");
 			break;
 		}
 		break;

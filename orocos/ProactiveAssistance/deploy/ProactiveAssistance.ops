@@ -1,17 +1,36 @@
+/**
+*  Unified startup and configuration file. Can be used to start any kind of imitation, assisted or not.
+*  Partially based on Imitation.ops by Franz
+*  Author: Martin Tykal
+*/
+
+var int item_type = 0;
+
 import("rtt_rosnode")
 import("lwr_fri")
 import("kuka_lwr_fri")
 import("KUKACommander")
+import("KUKAInterface")
 import("FTSensor")
 import("ProactiveAssistance");
 import("Execution")
 
 loadComponent("FRIServer", "lwr_fri::FRIServerRT")
-loadComponent("FTSensor", "iros::FTSensor")
 loadComponent("KUKACommander", "iros::KUKACommander")
 loadComponent("KUKACommanderROS", "iros::KUKACommanderROS")
 loadComponent("ProactiveAssistance", "iros::ProactiveAssistance")
 loadComponent("ExecutionController", "iros::orocos::pbd::dmp::execution::Controller")
+loadComponent("FTSensor", "iros::FTSensor")
+
+if(item_type == 0) then {
+	loadComponent("KUKAInterface", "iros::orocos::pbd::KUKAInterfaceJoints")
+} else if(item_type == 1) then {
+	loadComponent("KUKAInterface", "iros::orocos::pbd::KUKAInterfacePosition")
+} else if(item_type == 2) then {
+	loadComponent("KUKAInterface", "iros::orocos::pbd::KUKAInterfacePose")
+} else if(item_type == 3) then {
+	loadComponent("KUKAInterface", "iros::orocos::pbd::KUKAInterfacePoseForceZ")
+}
 
 // Not periodic, highest priority, real-time scheduler
 //setActivity("FRIServer", 0.001, HighestPriority, ORO_SCHED_RT)
@@ -20,14 +39,18 @@ FRIServer.udp_port=49938
 
 
 // 1000Hz, highest priority, real-time scheduler
-setActivity("FTSensor", 0, HighestPriority, ORO_SCHED_RT)
 
+setActivity("FTSensor", 0, HighestPriority, ORO_SCHED_RT)
+setActivity("ExecutionController", 0, 70, ORO_SCHED_RT)
 setActivity("KUKACommander", 0, 70, ORO_SCHED_RT)
 setActivity("KUKACommanderROS", 0.01, 50, ORO_SCHED_RT)
 setActivity("ProactiveAssistance", 0.005, 70, ORO_SCHED_RT)
+setActivity("KUKAInterface", 0.001, 50, ORO_SCHED_RT)
 
 addPeer("KUKACommanderROS", "KUKACommander")
+addPeer("KUKAInterface", "KUKACommander")
 addPeer("ProactiveAssistance", "KUKACommander")
+addPeer("ExecutionController", "KUKAInterface")
 
 // Standard connection policy
 var ConnPolicy cp
@@ -43,19 +66,36 @@ connect("FRIServer.RobotState", "KUKACommander.RobotState", cp)
 connect("FRIServer.desJntImpedance", "KUKACommander.desJntImpedance", cp)
 connect("FRIServer.desCartImpedance", "KUKACommander.desCartImpedance", cp)
 
-connect("ExecutionController.desState", "KUKAInterface.desState", cp)
-connect("KUKAInterface.msrState", "ExecutionController.msrState", cp)
-connect("ExecutionController.desStartState", "KUKAInterface.start_state", cp)
-
 connect("FRIServer.msrJointState", "KUKACommander.msrJointState", cp)
 connect("FRIServer.msrCartPos", "KUKACommander.msrCartPos", cp)
 connect("FRIServer.msrExtCartWrench", "KUKACommander.msrExtCartWrench", cp)
+
+connect("FRIServer.FRIState", "ExecutionController.friState", cp)
+connect("FRIServer.counter", "ExecutionController.counter", cp)
 
 connect("KUKACommander.desiredJntPos", "FRIServer.desJntPos", cp)
 connect("KUKACommander.desiredJntVel", "FRIServer.desJntVel", cp)
 connect("KUKACommander.desiredCartPos", "FRIServer.desCartPos", cp)
 connect("KUKACommander.desCartForce", "FRIServer.desAddTcpWrench", cp)
 connect("KUKACommander.desJntForce", "FRIServer.desAddJntTrq", cp)
+
+connect("ExecutionController.desState", "KUKAInterface.desState", cp)
+connect("KUKAInterface.msrState", "ExecutionController.msrState", cp)
+connect("ExecutionController.desStartState", "KUKAInterface.start_state", cp)
+
+if(item_type == 0) then {
+	connect("KUKAInterface.desPosition", "FRIServer.desJntPos", cp)
+	connect("FRIServer.msrJointState", "KUKAInterface.msrPosition", cp)
+} else if(item_type == 1 || item_type == 2) then {
+	connect("KUKAInterface.desPosition", "FRIServer.desCartPos", cp)
+	connect("FRIServer.msrCartPos", "KUKAInterface.msrPosition", cp)
+} else if(item_type == 3) then {
+	connect("KUKAInterface.desPosition", "FRIServer.desCartPos", cp)
+	connect("FRIServer.msrCartPos", "KUKAInterface.msrPosition", cp)
+	connect("KUKAInterface.desForce", "FRIServer.desAddTcpWrench", cp)
+	connect("FRIServer.msrExtCartWrench", "KUKAInterface.msrForce", cp)
+	connect("FTSensor.ForcePort", "KUKAInterface.msrForceFT", cp)
+}
 
 connect("FRIServer.counter", "FTSensor.Trigger", cp)
 
@@ -78,6 +118,8 @@ connect("KUKAInterface.prepared", "ExecutionController.in_prepared", cp)
 connect("KUKAInterface.start_pos_reached", "ExecutionController.in_start_pos_reached", cp)
 
 stream("FRIServer.msrJointState", ros.topic("/iros/pbd/dmp/JointPos")) 
+stream("FRIServer.msrCartPos", ros.topic("/iros/pbd/dmp/CartPose"))
+stream("FTSensor.ForcePort", ros.topic("/iros/pbd/dmp/FTForce"))
 
 stream("ExecutionController.out_prepared", ros.topic("/iros/pbd/dmp/execution/interface/prepared"))
 stream("ExecutionController.out_finished", ros.topic("/iros/pbd/dmp/execution/interface/finished"))
@@ -99,6 +141,7 @@ FRIServer.configure()
 FTSensor.configure()
 KUKACommander.configure()
 KUKACommanderROS.configure()
+KUKAInterface.configure()
 ProactiveAssistance.configure()
 ExecutionController.configure()
 
@@ -108,5 +151,6 @@ FRIServer.start()
 FTSensor.start()
 KUKACommander.start()
 KUKACommanderROS.start()
+KUKAInterface.start()
 ExecutionController.start()
 ProactiveAssistance.start()

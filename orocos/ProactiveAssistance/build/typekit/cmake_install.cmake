@@ -80,9 +80,9 @@ ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unsp
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
+  INCLUDE("/home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/build/typekit/transports/typelib/cmake_install.cmake")
   INCLUDE("/home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/build/typekit/transports/corba/cmake_install.cmake")
   INCLUDE("/home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/build/typekit/transports/mqueue/cmake_install.cmake")
-  INCLUDE("/home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/build/typekit/transports/typelib/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 

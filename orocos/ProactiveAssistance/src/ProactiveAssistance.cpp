@@ -6,7 +6,7 @@
 #include <std_msgs/Float32.h>
 
 #define TORQUE_GAIN 0.005   //0.015
-#define FORCE_GAIN 0.01	//0.013
+#define FORCE_GAIN 0.013	//0.013
 #define NUMJOINTS 7
 
 namespace iros {
@@ -56,7 +56,7 @@ ProactiveAssistance::ProactiveAssistance(std::string const& name) :
 
 	this->addPort("msrKUKAWrench", port_msr_kuka_wrench).doc("Measured wrench");
 	this->addPort("desKUKAWrench", port_cmd_kuka_wrench).doc("Desired wrench");
-	log(Debug) << "ProacitveAssistance constructed !" << endlog();
+	log(Debug) << "ProactiveAssistance constructed !" << endlog();
 }
 
 bool ProactiveAssistance::configureHook() {

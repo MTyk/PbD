@@ -117,11 +117,11 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/ProactiveAssistance.tlb
     DESTINATION share/orogen)
 
 
+    add_subdirectory(transports/typelib)
+    
     add_subdirectory(transports/corba)
     
     add_subdirectory(transports/mqueue)
-    
-    add_subdirectory(transports/typelib)
     
 
 # Force the user to regenerate its typekit if the inputs changed
