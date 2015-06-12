@@ -1,0 +1,131 @@
+
+#include <rtt/RTT.hpp>
+#include <rtt/Component.hpp>
+
+#include "KUKAInterfacePosition.hpp"
+
+
+namespace iros {
+namespace orocos {
+namespace pbd {
+
+
+using namespace geometry_msgs;
+using namespace std;
+using namespace RTT;
+
+
+	KUKAInterfacePosition::KUKAInterfacePosition(string nodeName) : KUKAInterface(nodeName, FRI_CTRL_CART_IMP)	{
+		Logger::In in((this->getName()));
+		this->addPort("desPosition", port_position).doc("Desired position");
+		this->addPort("desPositionROS", port_position_ros).doc("Desired position");
+		this->addPort("msrPosition", port_position_measured).doc("Desired position");
+
+		port_state_msr.setDataSample(vector<double>(3));
+
+		check_start_state = false;
+
+		stiffness.linear.x = 2000;
+		stiffness.linear.y = 2000;
+		stiffness.linear.z = 2000;
+		stiffness.angular.x = 200;
+		stiffness.angular.y = 200;
+		stiffness.angular.z = 200;
+
+		damping.linear.x = 0.7;
+		damping.linear.y = 0.7;
+		damping.linear.z = 0.7;
+		damping.angular.x = 0.7;
+		damping.angular.y = 0.7;
+		damping.angular.z = 0.7;
+	}
+
+	void KUKAInterfacePosition::approach_state() {
+		Logger::In in((this->getName()));
+		static int i = -1;
+		i++;
+		Pose p {}, p_cur {};
+		port_position_measured.read(p_cur);
+		
+		// Convert vector to position and publish
+		p.position.x = state[0];
+		p.position.y = state[1];
+		p.position.z = state[2];
+		p.orientation = p_cur.orientation;
+		port_position.write(p);
+		port_position_ros.write(p);
+		//if(i % 50 == 0) {
+		if(false) {
+			log(Info) << "Msr pos: " << p_cur.position << endlog();
+			log(Info) << "Cmd pos: " << p.position << endlog();
+			log(Info) << "Msr rot: " << p_cur.orientation << endlog();
+			log(Info) << "Cmd rot: " << p.orientation << endlog();
+		}
+		setCartesianImpedance(stiffness, damping);
+
+		// Convert position to vector and publish
+		vector<double> state_msr(3);
+		state_msr[0] = p_cur.position.x;
+		state_msr[1] = p_cur.position.y;
+		state_msr[2] = p_cur.position.z;
+		port_state_msr.write(state_msr);
+	}
+
+	void KUKAInterfacePosition::approach_start_state() {
+		Logger::In in((this->getName()));
+		
+		// Convert vector to position and call CartesianPTPMotion with that object
+		Pose p {}, p_cur {};
+		port_position_measured.read(p_cur);
+		p.position.x = start_state.at(0);
+		p.position.y = start_state.at(1);
+		p.position.z = start_state.at(2);
+		p.orientation = p_cur.orientation;
+		CartesianPTPMotion(p, 50);
+		check_start_state = true;
+	}
+
+	void KUKAInterfacePosition::updateHook() {
+		KUKAInterface::updateHook();
+		Logger::In in((this->getName()));
+
+		// Check whether the start state has been reached
+		if(check_start_state) {
+			Pose p_cur {};
+			port_position_measured.read(p_cur);
+
+			double min_dist = 0.01; // Maximum allowed deviation
+			log(Debug) << "Target:" << start_state[0] << " " << start_state[1] << " " << start_state[2] << endlog();
+			log(Debug) << "Moment:" << p_cur.position.x << " " << p_cur.position.y << " " << p_cur.position.z  << endlog();
+
+			// Compare current and desired position for all positional dimensions
+			if(fabs(start_state[0] - p_cur.position.x) > min_dist ||
+					fabs(start_state[1] - p_cur.position.y) > min_dist ||
+					fabs(start_state[2] - p_cur.position.z) > min_dist)
+				return;
+
+			check_start_state = false;
+			start_state_reached();
+		}
+	}
+
+} /* namespace pbd */
+} /* namespace orocos */
+} /* namespace iros */
+
+/*
+ * Using this macro, only one component may live
+ * in one library *and* you may *not* link this library
+ * with another component library. Use
+ * ORO_CREATE_COMPONENT_TYPE()
+ * ORO_LIST_COMPONENT_TYPE(KUKAInterfacePosition)
+ * In case you want to link with another library that
+ * already contains components.
+ *
+ * If you have put your component class
+ * in a namespace, don't forget to add it here too:
+ */
+//ORO_CREATE_COMPONENT(iros::orocos::pbd::KUKAInterfacePosition)
+//ORO_CREATE_COMPONENT_TYPE()
+ORO_LIST_COMPONENT_TYPE(iros::orocos::pbd::KUKAInterfacePosition)
+//ORO_CREATE_COMPONENT_LIBRARY()

@@ -1,0 +1,22 @@
+/* Generated from orogen/lib/orogen/templates/typekit/corba/Types.idl */
+
+#ifndef __OROGEN_TYPEKIT_KUKAINTERFACE_IDL__
+#define __OROGEN_TYPEKIT_KUKAINTERFACE_IDL__
+
+
+
+
+module orogen {
+    module Corba {
+        typedef sequence<double> vector__double_;
+        struct KUKAInterfaceData {
+            ::orogen::Corba::vector__double_ samples;
+        };
+
+    };
+
+};
+
+
+#endif
+

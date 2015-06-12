@@ -1,0 +1,18 @@
+# Generated from orogen/lib/orogen/templates/typekit/mqueue/transport-mqueue.pc
+
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${prefix}/lib/orocos/xenomai/KUKAInterface/types
+includedir=${prefix}/include/orocos
+
+project_name=KUKAInterface
+
+type_registry=${prefix}/share/orogen/KUKAInterface.tlb
+
+Name: KUKAInterfaceMQueueTransport
+Version: 
+
+Description: KUKAInterface types support for the Orocos type system
+Libs: -L${libdir} -lKUKAInterface-transport-mqueue-xenomai
+Cflags: -I${includedir}
+

@@ -478,17 +478,17 @@ regen/fast:
 .PHONY : regen/fast
 
 #=============================================================================
-# Target rules for targets named ProactiveAssistance-transport-typelib-xenomai
+# Target rules for targets named ProactiveAssistance-transport-mqueue-xenomai
 
 # Build rule for target.
-ProactiveAssistance-transport-typelib-xenomai: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 ProactiveAssistance-transport-typelib-xenomai
-.PHONY : ProactiveAssistance-transport-typelib-xenomai
+ProactiveAssistance-transport-mqueue-xenomai: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 ProactiveAssistance-transport-mqueue-xenomai
+.PHONY : ProactiveAssistance-transport-mqueue-xenomai
 
 # fast build rule for target.
-ProactiveAssistance-transport-typelib-xenomai/fast:
-	$(MAKE) -f typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/build.make typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/build
-.PHONY : ProactiveAssistance-transport-typelib-xenomai/fast
+ProactiveAssistance-transport-mqueue-xenomai/fast:
+	$(MAKE) -f typekit/transports/mqueue/CMakeFiles/ProactiveAssistance-transport-mqueue-xenomai.dir/build.make typekit/transports/mqueue/CMakeFiles/ProactiveAssistance-transport-mqueue-xenomai.dir/build
+.PHONY : ProactiveAssistance-transport-mqueue-xenomai/fast
 
 #=============================================================================
 # Target rules for targets named ProactiveAssistance-transport-corba-xenomai
@@ -504,17 +504,17 @@ ProactiveAssistance-transport-corba-xenomai/fast:
 .PHONY : ProactiveAssistance-transport-corba-xenomai/fast
 
 #=============================================================================
-# Target rules for targets named ProactiveAssistance-transport-mqueue-xenomai
+# Target rules for targets named ProactiveAssistance-transport-typelib-xenomai
 
 # Build rule for target.
-ProactiveAssistance-transport-mqueue-xenomai: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 ProactiveAssistance-transport-mqueue-xenomai
-.PHONY : ProactiveAssistance-transport-mqueue-xenomai
+ProactiveAssistance-transport-typelib-xenomai: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 ProactiveAssistance-transport-typelib-xenomai
+.PHONY : ProactiveAssistance-transport-typelib-xenomai
 
 # fast build rule for target.
-ProactiveAssistance-transport-mqueue-xenomai/fast:
-	$(MAKE) -f typekit/transports/mqueue/CMakeFiles/ProactiveAssistance-transport-mqueue-xenomai.dir/build.make typekit/transports/mqueue/CMakeFiles/ProactiveAssistance-transport-mqueue-xenomai.dir/build
-.PHONY : ProactiveAssistance-transport-mqueue-xenomai/fast
+ProactiveAssistance-transport-typelib-xenomai/fast:
+	$(MAKE) -f typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/build.make typekit/transports/typelib/CMakeFiles/ProactiveAssistance-transport-typelib-xenomai.dir/build
+.PHONY : ProactiveAssistance-transport-typelib-xenomai/fast
 
 # Help Target
 help:
@@ -554,9 +554,9 @@ help:
 	@echo "... ProactiveAssistance-typekit-xenomai"
 	@echo "... check-typekit-uptodate"
 	@echo "... regen"
-	@echo "... ProactiveAssistance-transport-typelib-xenomai"
-	@echo "... ProactiveAssistance-transport-corba-xenomai"
 	@echo "... ProactiveAssistance-transport-mqueue-xenomai"
+	@echo "... ProactiveAssistance-transport-corba-xenomai"
+	@echo "... ProactiveAssistance-transport-typelib-xenomai"
 .PHONY : help
 
 

@@ -1,0 +1,18 @@
+# Generated from orogen/lib/orogen/templates/typekit/typekit.pc
+
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${prefix}/lib/orocos/xenomai/KUKAInterface/types
+includedir=${prefix}/include/orocos
+
+project_name=KUKAInterface
+
+type_registry=${prefix}/share/orogen/KUKAInterface.tlb
+
+Name: KUKAInterfaceTypekit
+Version: 
+Requires: 
+Description: KUKAInterface types support for the Orocos type system
+Libs: -L${libdir} -lKUKAInterface-typekit-xenomai
+Cflags: -I${includedir} -I${includedir}/KUKAInterface/types  "-DOROCOS_TARGET=xenomai" "-D_GNU_SOURCE" "-D_REENTRANT" "-D__XENO__" "-I/home/intelligentrobotics/ws/orocos/orocos_toolchain/install/include" "-I/usr/local/include/xenomai" "-I/usr/local/include"
+

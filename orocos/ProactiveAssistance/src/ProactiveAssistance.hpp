@@ -8,6 +8,7 @@
 #include <kdl/jntarray.hpp>
 #include <kdl/jacobian.hpp>
 #include <tf_conversions/tf_kdl.h>
+#include <std_msgs/Float32.h>
 
 #include <std_msgs/Empty.h>
 #include <kuka_lwr_fri/friComm.h>
@@ -33,19 +34,27 @@ class ProactiveAssistance : public RTT::TaskContext{
     void cleanupHook();
 
   private:
-    boost::array<float, 7> stiffness, damping;
-
+ //   boost::array<float, 7> stiffness, damping;
+    geometry_msgs::Twist stiffness, damping;
   	InputPort<size_t> port_counter;
 
-	OutputPort<geometry_msgs::Pose> port_cmd_position;
+	InputPort<geometry_msgs::Pose> port_cmd_position;
+	OutputPort<geometry_msgs::Pose> port_des_position;
 	InputPort<geometry_msgs::Pose> port_msr_position;
+
+	InputPort<sensor_msgs::JointState> port_msr_jnt_pos;
+	OutputPort<motion_control_msgs::JointPositions> port_cmd_jnt_pos;
 	OutputPort<motion_control_msgs::JointEfforts> port_cmd_addJntTrq;
 	InputPort<lwr_fri::FriJointTorques> port_msr_extJntTrq;
+
+	InputPort<std_msgs::Float32> port_timestamp;
 
 	InputPort<std_msgs::Empty> port_start_assistance;
 	InputPort<std_msgs::Empty> port_stop_assistance;
 	OutputPort<std_msgs::Empty> port_isstarted_assistance;
 	OutputPort<std_msgs::Empty> port_isstopped_assistance;
+
+	InputPort<geometry_msgs::Twist> port_impedance;
 
 	InputPort<geometry_msgs::Vector3> port_force;
 	InputPort<geometry_msgs::Vector3> port_torque;
@@ -58,6 +67,9 @@ class ProactiveAssistance : public RTT::TaskContext{
 	geometry_msgs::Vector3 current_torque;
 	geometry_msgs::Wrench current_kuka_wrench;
 	lwr_fri::FriJointTorques current_jnt_trq;
+	sensor_msgs::JointState current_jnt_pos;
+	std_msgs::Float32 current_timestamp;
+	geometry_msgs::Twist current_impedance;
 
 //	geometry_msgs::Twist stiffness;
 //	geometry_msgs::Twist damping;

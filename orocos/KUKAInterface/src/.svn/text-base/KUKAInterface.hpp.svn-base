@@ -1,0 +1,103 @@
+#ifndef OROCOS_KUKAINTERFACE_COMPONENT_HPP
+#define OROCOS_KUKAINTERFACE_COMPONENT_HPP
+
+#include <rtt/RTT.hpp>
+#include <rtt/Port.hpp>
+#include <rtt/Logger.hpp>
+
+#include <kuka_lwr_fri/friComm.h>
+#include <lwr_fri/typekit/Types.hpp>
+#include <std_msgs/typekit/Types.hpp>
+#include <sensor_msgs/typekit/Types.hpp>
+#include <geometry_msgs/typekit/Types.hpp>
+
+#include <vector>
+
+namespace iros {
+namespace orocos {
+namespace pbd {
+
+using namespace RTT;
+using namespace std;
+
+class KUKAInterface : public RTT::TaskContext{
+  public:
+    KUKAInterface(string name, FRI_CTRL control_mode);
+    virtual bool configureHook();
+
+  protected:
+    virtual bool startHook();
+    virtual void updateHook();
+    virtual void stopHook();
+    virtual void cleanupHook();
+
+  private:
+
+    FRI_CTRL control_mode;
+	void incoming_start_state(RTT::base::PortInterface*);
+	void incoming_state(RTT::base::PortInterface*);
+	
+	/**
+	 *  Abstract function that is called when a new start state is received
+	 *  The function is implemented by the child classes, such as KUKAInterfaceJoints
+	 */
+	virtual void approach_start_state() {};
+	
+	/**
+	 *  Abstract function that is called when a new desired state is received
+	 *  The function is implemented by the child classes, such as KUKAInterfaceJoints
+	 */
+	virtual void approach_state() {};
+	
+	/**
+	 *  Abstract function that is called when the robot shall prepare for execution
+	 *  The function is implemented by the child classes, such as KUKAInterfaceJoints
+	 */
+	virtual void prepare_state_approach();
+	
+	void (*cb)(void);
+
+	TaskContext* commander;
+
+	bool prepare;
+
+	InputPort<tFriIntfState> port_fri_state;
+
+	InputPort< vector<double> > port_start_state;
+	InputPort< vector<double> > port_state_cmd;
+	OutputPort< std_msgs::Empty > port_prepared;
+	OutputPort< std_msgs::Empty > port_start_pos_reached;
+
+  protected:
+	void start_state_reached();
+
+	OutputPort< vector<double> > port_state_msr;
+
+	OperationCaller<FRI_STATE(void)> getCurrentState;
+	OperationCaller<FRI_CTRL(void)> getCurrentControlMode;
+	OperationCaller<void(void)> switchToMonitorState;
+	OperationCaller<void(void)> switchToCommandState;
+	OperationCaller<void(void)> stopCommunication;
+	OperationCaller<void(FRI_CTRL, FRI_STATE)> setControlMode;
+	OperationCaller<void(geometry_msgs::Twist, geometry_msgs::Twist)> setCartesianImpedance;
+	OperationCaller<void(boost::array<float, 7>, boost::array<float, 7>)> setJointImpedance;
+	OperationCaller<void(bool)> activateGravityCompensation;
+	OperationCaller<bool(boost::array<double, 7>, double)> moveToJointPosition;
+	OperationCaller<bool(geometry_msgs::Pose, double)> moveToCartesianPosition;
+	OperationCaller<bool(void)> stopMovements;
+	OperationCaller<bool(void)> isMoving;
+	OperationCaller<bool(boost::array<double, 7> jointPos, uint8_t speed)> jointPTPMotion;
+	OperationCaller<bool(geometry_msgs::Pose CartPose, double speed)> CartesianLINMotion;
+	OperationCaller<bool(geometry_msgs::Pose CartPose, uint8_t speed)> CartesianPTPMotion;
+	OperationCaller<geometry_msgs::Quaternion(double, double, double)> getQuaternionFromRPY;
+
+	vector<double> state, start_state;
+	tFriIntfState fri_state;
+};
+
+
+}  // namespace pbd
+}  // namespace orocos
+}  // namespace iros
+
+#endif

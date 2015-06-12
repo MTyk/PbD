@@ -13,6 +13,8 @@ rtt/Component.hpp
 -
 iostream
 -
+math.h
+-
 geometry_msgs/Vector3.h
 /home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/src/geometry_msgs/Vector3.h
 std_msgs/Float32.h
@@ -30,6 +32,8 @@ kdl/jntarray.hpp
 kdl/jacobian.hpp
 -
 tf_conversions/tf_kdl.h
+-
+std_msgs/Float32.h
 -
 std_msgs/Empty.h
 -

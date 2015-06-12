@@ -1,0 +1,420 @@
+/*
+ * KUKAInterfacePoseForceZ.cpp
+ *
+ *  Created on: May 5, 2014
+ *      Author: Franz Steinmetz
+ */
+
+#include "KUKAInterfacePoseForceZ.hpp"
+
+#include <rtt/RTT.hpp>
+#include <rtt/Component.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <fstream>
+#include <kdl/frames.hpp>
+
+//If used in combination with AssistanceController
+#define ASSISTANCE 0
+
+namespace iros {
+namespace orocos {
+namespace pbd {
+
+using namespace geometry_msgs;
+using namespace std;
+using namespace RTT;
+
+
+	KUKAInterfacePoseForceZ::KUKAInterfacePoseForceZ(string nodeName) : KUKAInterface(nodeName, FRI_CTRL_CART_IMP)	{
+		Logger::In in((this->getName()));
+		this->addPort("desPosition", port_position).doc("Desired position");
+		this->addPort("desPositionROS", port_position_ros).doc("Desired position");
+		this->addPort("desForceROS", port_force_ros).doc("Desired force");
+		this->addPort("cmdForceROS", port_force_cmd_ros).doc("Commanded force");
+		this->addPort("desForce", port_force).doc("Desired force");
+		this->addPort("msrPosition", port_position_msr).doc("Measured position");
+		this->addPort("msrForce", port_force_msr).doc("Measured force");
+		this->addPort("msrForceFT", port_ft_force_msr).doc("Measured force from F/T sensor");
+
+		port_state_msr.setDataSample(vector<double>(8));
+
+		check_start_state = false;
+
+		double stiffnessValue;
+		double dampingValue;
+		if (ASSISTANCE) {
+			log(Info)<< "KUKAInterfacePoseForceZ" <<endlog();
+			std::ifstream ifs(
+					"/home/intelligentrobotics/ws/pbd/Applications/params/ComplianceParameters.txt",
+					std::fstream::in);
+			{
+				boost::archive::text_iarchive ia(ifs);
+				ia >> stiffnessValue;
+				ia >> dampingValue;
+			}
+			log(Info) << "Stiffness: " << stiffnessValue << endlog();
+			log(Info) << "Damping: " << dampingValue << endlog();
+
+			stiffness.linear.x = stiffnessValue;
+			stiffness.linear.y = stiffnessValue;
+			stiffness.linear.z = 2000;
+			stiffness.angular.x = 200; 
+			stiffness.angular.y = 200; 
+			stiffness.angular.z = 200;
+
+			damping.linear.x = dampingValue;
+			damping.linear.y = dampingValue;
+			damping.linear.z = dampingValue;
+			damping.angular.x = dampingValue;
+			damping.angular.y = dampingValue;
+			damping.angular.z = dampingValue;
+
+		}else{	
+			stiffness.linear.x = 2000;
+			stiffness.linear.y = 2000;
+			stiffness.linear.z = 2000;
+			stiffness.angular.x = 200; // KIM: 200 // Plane: 400
+			stiffness.angular.y = 200; // KIM: 200 // Plane: 300
+			stiffness.angular.z = 200; // KIM: 200 // Plane: 400
+
+			damping.linear.x = 0.7;
+			damping.linear.y = 0.7;
+			damping.linear.z = 0.7;
+			damping.angular.x = 0.7;
+			damping.angular.y = 0.7;
+			damping.angular.z = 0.7;
+		}	
+	}
+
+	void KUKAInterfacePoseForceZ::approach_state() {
+		Logger::In in((this->getName()));
+		Pose p {}, p_cur {};
+		Wrench f {}, f_cur {};
+		Vector3 f_ft_cur;
+
+		bool force_ctrl = false;
+
+		// Static variables keep their content over all function calls
+		static size_t i = 0;
+		static Pose lost_contact_pose_diff {};
+		static bool wait_for_contact = true;
+		static bool contact_made = false;
+		static bool contact_lost = false;
+
+		// Read current state
+		port_position_msr.read(p_cur);
+		quatNorm(p_cur.orientation);
+		port_force_msr.read(f_cur);
+		port_ft_force_msr.read(f_ft_cur);
+
+		static Pose last_pose = p_cur;
+		// Measure and store bias of the FT sensor and the KRC torque sensors
+		static double msr_f_z_bias = f_cur.force.z;
+		static double msr_f_z_ft_bias = f_ft_cur.z;
+
+		// Determine sample time
+		double dt = fri_state.desiredMsrSampleTime;
+
+		// Current FT sensor force measurement (with respect to the bias)
+		double f_ft_z = -(f_ft_cur.z - msr_f_z_ft_bias);
+		// Low pass filter for FT force measurement (moving average)
+		static double last_f_ft_z = f_ft_z;
+		double alpha = 0.8;
+		f_ft_z = alpha * last_f_ft_z + (1-alpha) * f_ft_z;
+
+		double f_z_des = -state[7]; // Measured force is inverted acted force!
+		//if(fabs(f_z_des) > 3)		// Limit force to 3N
+		//	f_z_des = 3 * f_z_des / fabs(f_z_des);
+
+		//log(Info) << "Des force" << f_z_des << endlog();
+
+		double vel_approach = 0.02; // m/s
+		double f_approach = 1;
+		double f_max_no_contact = 1;
+
+		// Force Z or Position Z control?
+		if(fabs(f_z_des) > 0.8 // Force control, when desired force is bigger than 0.8N
+				){//&& fabs(f_z_des) > max_des_force/2) { // Cope with problematic sensor readings
+			force_ctrl = true;
+			contact_made = true;
+			contact_lost = false;
+
+			//if(fabs(f_z_des) > max_des_force)
+			//	max_des_force = fabs(f_z_des);
+
+			stiffness.linear.z = 0; // Ignore position commands in z direction
+			damping.linear.z = 0.7;
+
+			if(wait_for_contact && fabs(f_ft_z) < f_max_no_contact /*&& fabs(f_z_des) > f_max_no_contact*/) { 	// Not in contact yet
+													// Approach with constant velocity
+				static double P_vel = 50;			// using PID controller
+				static double I_vel = 300;
+				static double D_vel = 0.0;//0.01;
+				static double last_vel_e = 0;
+				static double vel_e_accum = 3;
+
+				// Constantly update the KUKA Fz bias according to the current FT Fz value
+				// as long as there is no contact
+				//msr_f_z_bias = f_cur.force.z - f_ft_z;
+
+				if(!wait_for_contact) // Reset to an appropriate value (experimentally determined)
+					vel_e_accum = 3;
+
+				Point last_pos = last_pose.position, cur_pos = p_cur.position;
+				double vel = sqrt(pow(last_pos.x - cur_pos.x, 2) + pow(last_pos.y - cur_pos.y, 2) + pow(last_pos.z - cur_pos.z, 2)) / dt;
+				vel *= (last_pos.z - cur_pos.z) > 0 ? 1 : -1;
+				double vel_e = vel_approach - vel;
+				double d_vel_e = vel_e - last_vel_e;
+				vel_e_accum += vel_e;
+				//if(vel_e_accum > 200)
+				//	vel_e_accum = 200;
+				double P_gain = P_vel * vel_e;
+				if(P_gain < 0)
+					P_gain = 0;
+				double gain = P_gain + I_vel * vel_e_accum * dt + D_vel * d_vel_e / dt;
+
+				f.force.z = (f_approach + msr_f_z_bias) * gain;
+				last_vel_e = vel_e;
+
+				if(counter%100==0) {
+					log(Info) << "Approaching object" << endlog();
+					log(Info) << "KUKA force: " << f_cur.force.z << " FT Force: " << f_ft_z << " Fz des: " << f_z_des << endlog();
+					log(Info) << "vel_des = " <<vel_approach << " vel = " << vel << " vel_e = " << vel_e << " d_vel_e = " << d_vel_e << " vel_e_accum = " << vel_e_accum << endlog();
+					log(Info) << "P = " << P_gain << " I = " << I_vel * vel_e_accum * dt << " D = " << D_vel * d_vel_e / dt << endlog();
+					log(Info) << "gain = " << gain << " cmd_f = " << f.force.z << endlog();
+				}
+
+			} else {							// In-contact
+												// Keep desired force
+												// Use ID-controller to compensate for error in the KRC force measurements
+
+				static size_t bounce_ctr = 0;
+				if(wait_for_contact) {
+					wait_for_contact = false;
+					bounce_ctr = 0;
+				}
+
+				//if(bounce_ctr < 0.05 / dt) // first 50 ms
+				//	f_ft_z = f_z_des;
+
+				static double P_f = 0;			// using PID controller
+				static double I_f = 2.0;
+				static double D_f = 0.002;
+				static double last_f_e = 0;
+				static double f_e_accum = 200;  // experimental value
+				double f_e = f_z_des - f_ft_z;
+				double d_f_e = f_e - last_f_e;
+				f_e_accum += f_e;
+				double gain = 1 + P_f * f_e + I_f * f_e_accum * dt + D_f * d_f_e / dt;
+
+				if(false) { // false deactivates the PID force controller, true activates it
+					gain = 1;
+				}
+				f.force.z = msr_f_z_bias + f_z_des * gain;
+
+				last_f_e = f_e;
+
+				bounce_ctr++;
+
+				if(counter%100==0) {
+					log(Info) << "Pressing" << endlog();
+					log(Info) << "KUKA force: " << f_cur.force.z << " FT Force: " << f_ft_z << endlog();
+					log(Info) << "f_des = " << f_z_des << " f = " << f_ft_z << " f_e = " << f_e << " d_f_e = " << d_f_e << " f_e_accum = " << f_e_accum << endlog();
+					log(Info) << "P = " << P_f * f_e << " I = " << I_f * f_e_accum * dt << " D = " << D_f * d_f_e / dt << endlog();
+					log(Info) << "gain = " << gain << " cmd_f = " << f.force.z << endlog();
+				}
+
+			}
+
+			/*f.force.z = f_z_des + msr_f_z_bias;
+			if(fabs(f_cur.force.z) < msr_f_z_bias + 1 && fabs(f_z_des) + msr_f_z_bias > f_z_max) { // no contact
+				if(i%20 == 0)
+					log(Info) << "Approaching object -- Bias = " << msr_f_z_bias << endlog();
+				wait_for_contact = true;
+				f.force.z = f_z_des/fabs(f_z_des) * min(f_z_max, fabs(f_z_des) + msr_f_z_bias);
+			}
+	*/
+			//if(i%20 == 0)
+			//	log(Info) << "Press: Cur Fz = " << f_cur.force.z << " Des Fz = " << f_z_des << " Cmd Fz = " << f.force.z << endlog();
+
+		} else {
+			// When the contact is lost, store the offset position, to continue the trajectory relative from teh current point
+			if(contact_made && !contact_lost) {
+				if(counter%100==0)
+				log(Info) << "Setting relative position" << endlog();
+				lost_contact_pose_diff.position.x = p_cur.position.x - state[0];
+				lost_contact_pose_diff.position.y = p_cur.position.y - state[1];
+				lost_contact_pose_diff.position.z = p_cur.position.z - state[2];
+				contact_lost = true;
+				wait_for_contact = true;
+			}
+
+			// Reset stiffness
+			stiffness.linear.z = 2000;
+			damping.linear.z = 0.7;
+			f.force.z = 0;
+
+			if(i%100 == 0)
+				log(Info) << "Moving" << endlog();
+		}
+
+		// Define desired state, make trajectory relative
+		p.position.x = state[0] + lost_contact_pose_diff.position.x;
+		p.position.y = state[1] + lost_contact_pose_diff.position.y;
+		p.position.z = state[2] + lost_contact_pose_diff.position.z;
+
+		double norm = quatNorm(state[3], state[4], state[5], state[6]);
+		p.orientation.x = state[3] / norm;
+		p.orientation.y = state[4] / norm;
+		p.orientation.z = state[5] / norm;
+		p.orientation.w = state[6] / norm;
+
+		if(false) { // Fix orientation parallel to the table in x direction
+			p.orientation.x = 0.75;
+			p.orientation.y = 0.75;
+			p.orientation.z = 0;
+			p.orientation.w = 0;
+		}
+
+		// Command desired state to FRI Server
+		port_position.write(p);
+		port_position_ros.write(p);
+		std_msgs::Float64 force_msg, force_cmd_msg;
+		force_msg.data = state[7];
+		port_force_ros.write(force_msg);
+		force_cmd_msg.data = f.force.z;
+		port_force_cmd_ros.write(force_cmd_msg);
+		port_force.write(f);
+		setCartesianImpedance(stiffness, damping);
+
+		if(false && i % 20 == 0) {
+			log(Info) << "Msr pos: " << p_cur.position << endlog();
+			log(Info) << "Cmd pos: " << p.position << endlog();
+			log(Info) << "Msr rot: " << p_cur.orientation << endlog();
+			log(Info) << "Cmd rot: " << p.orientation << endlog();
+		}
+
+		// Output current state
+		vector<double> state_msr(8);
+
+		if(force_ctrl) {	// Ignore pose while in force control
+			state_msr[0] = state[0];
+			state_msr[1] = state[1];
+			state_msr[2] = state[2];
+			state_msr[3] = state[3];
+			state_msr[4] = state[4];
+			state_msr[5] = state[5];
+			state_msr[6] = state[6];
+			if(wait_for_contact) // when approaching an object for desired contact
+				// Stop evolution by returning a "very wrong" force
+				state_msr[7] = state[7] * 10;
+			else if(fabs(f_ft_z) < f_max_no_contact)
+				// Reduce influence of force error
+				state_msr[7] = state[7] + (f_z_des - f_ft_z) / 2;
+			else
+				// Force error has no influence
+				state_msr[7] = state[7];
+		} else {			// Ignore force while in pose control
+			// Feedback current (relative) position
+			state_msr[0] = p_cur.position.x - lost_contact_pose_diff.position.x;
+			state_msr[1] = p_cur.position.y - lost_contact_pose_diff.position.y;
+			state_msr[2] = p_cur.position.z - lost_contact_pose_diff.position.z;
+
+			// Determine error in angle
+			geometry_msgs::Quaternion q_cur = p_cur.orientation;
+			geometry_msgs::Quaternion q_des = p.orientation;
+			// Relative angle between current and desired quaternion
+			double angle = 2 * acos(q_cur.w*q_des.w + (q_cur.x*q_des.x + q_cur.y*q_des.y + q_cur.z*q_des.z));
+			angle =  angle > M_PI ? -(2 * M_PI - angle) : angle; // -180 < angle < 180
+			state_msr[3] = state[3]; // p_cur.orientation.x;
+			state_msr[4] = state[4]; // p_cur.orientation.y;
+			state_msr[5] = state[5]; // p_cur.orientation.z;
+			// Artificially generated error to better handle quaternions
+			double rel_err = angle / M_PI * 0.05;
+			state_msr[6] = state[6] + rel_err; // feedback force for angle deviation 
+			state_msr[7] = state[7];
+		}
+
+		port_state_msr.write(state_msr);
+		last_pose = p_cur;
+		last_f_ft_z = f_ft_z;
+		i++;
+	}
+
+	void KUKAInterfacePoseForceZ::approach_start_state() {
+		Logger::In in((this->getName()));
+		Pose p {}, p_cur {};
+		port_position_msr.read(p_cur);
+		
+		// Convert vector to pose and normalize quaternion
+		p.position.x = start_state.at(0);
+		p.position.y = start_state.at(1);
+		p.position.z = start_state.at(2);
+		double norm = quatNorm(start_state.at(3), start_state.at(4), start_state.at(5), start_state.at(6));
+		start_state[3] /= norm;
+		start_state[4] /= norm;
+		start_state[5] /= norm;
+		start_state[6] /= norm;
+		p.orientation.x = start_state.at(3);
+		p.orientation.y = start_state.at(4);
+		p.orientation.z = start_state.at(5);
+		p.orientation.w = start_state.at(6);
+		
+		// Use KRC PTP command to approach the start state using the generated pose object
+		CartesianPTPMotion(p, 50);
+		check_start_state = true;
+	}
+
+	void KUKAInterfacePoseForceZ::updateHook() {
+		KUKAInterface::updateHook();
+		Logger::In in((this->getName()));
+		counter++;
+		if(check_start_state) {
+			Pose p_cur {};
+			port_position_msr.read(p_cur);
+			
+			// Generate general rotations from quaternions
+			KDL::Rotation rot_msr = KDL::Rotation::Quaternion(p_cur.orientation.x, p_cur.orientation.y, p_cur.orientation.z, p_cur.orientation.w);
+			KDL::Rotation rot_cmd = KDL::Rotation::Quaternion(start_state[3], start_state[4], start_state[5], start_state[6]);
+
+			double ax, ay, az, aw, bx, by, bz, bw;
+			rot_msr.GetQuaternion(ax, ay, az, aw);
+			rot_cmd.GetQuaternion(bx, by, bz, bw);
+
+			// Retrieve quaternion elements from rotations
+			double min_dist = 0.01;
+			double min_rot = 0.01;
+			double angle = 2 * acos(aw*bw + (ax*bx + ay*by + az*bz)); // Determine relative error between quaternions
+			angle =  angle > M_PI ? -(2 * M_PI - angle) : angle;; // shift to be between -180 and +180
+			log(Debug) << "Target:" << start_state[0] << " " << start_state[1] << " " << start_state[2] << " 0" << endlog();
+			log(Debug) << "Moment:" << p_cur.position.x << " " << p_cur.position.y << " " << p_cur.position.z << " " << angle << endlog();
+			// Check for deviations from desired start state
+			if(fabs(start_state[0] - p_cur.position.x) > min_dist ||
+					fabs(start_state[1] - p_cur.position.y) > min_dist ||
+					fabs(start_state[2] - p_cur.position.z) > min_dist ||
+					fabs(angle) > min_rot)
+				return;
+
+			check_start_state = false;
+			start_state_reached();
+		}
+	}
+
+
+	double KUKAInterfacePoseForceZ::quatNorm(double x, double y, double z, double w) {
+		return sqrt(x*x + y*y + z*z + w*w);
+	}
+
+	void KUKAInterfacePoseForceZ::quatNorm(geometry_msgs::Quaternion& q) {
+		double norm = quatNorm(q.x, q.y, q.z, q.w);
+		q.x /= norm;
+		q.y /= norm;
+		q.z /= norm;
+		q.w /= norm;
+	}
+
+} /* namespace pbd */
+} /* namespace orocos */
+} /* namespace iros */
+
+ORO_LIST_COMPONENT_TYPE(iros::orocos::pbd::KUKAInterfacePoseForceZ)

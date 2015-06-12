@@ -1,10 +1,10 @@
 /**
 *  Unified startup and configuration file. Can be used to start any kind of imitation, assisted or not.
-*  Partially based on Imitation.ops by Franz
+*  Partially based on Imitation.ops by Franz Steinmetz
 *  Author: Martin Tykal
 */
 
-var int item_type = 0;
+var int item_type = 2;
 
 import("rtt_rosnode")
 import("lwr_fri")
@@ -34,17 +34,17 @@ if(item_type == 0) then {
 
 // Not periodic, highest priority, real-time scheduler
 //setActivity("FRIServer", 0.001, HighestPriority, ORO_SCHED_RT)
-setActivity("FRIServer", 0, HighestPriority, ORO_SCHED_RT)
+setActivity("FRIServer", 0.001, HighestPriority, ORO_SCHED_RT)
 FRIServer.udp_port=49938
 
 
 // 1000Hz, highest priority, real-time scheduler
 
-setActivity("FTSensor", 0, HighestPriority, ORO_SCHED_RT)
-setActivity("ExecutionController", 0, 70, ORO_SCHED_RT)
-setActivity("KUKACommander", 0, 70, ORO_SCHED_RT)
+setActivity("FTSensor", 0.001, HighestPriority, ORO_SCHED_RT)
+setActivity("ExecutionController", 0.01, 70, ORO_SCHED_RT)
+setActivity("KUKACommander", 0.01, 70, ORO_SCHED_RT)
 setActivity("KUKACommanderROS", 0.01, 50, ORO_SCHED_RT)
-setActivity("ProactiveAssistance", 0.005, 70, ORO_SCHED_RT)
+setActivity("ProactiveAssistance", 0.001, 70, ORO_SCHED_RT)
 setActivity("KUKAInterface", 0.001, 50, ORO_SCHED_RT)
 
 addPeer("KUKACommanderROS", "KUKACommander")
@@ -105,10 +105,15 @@ connect("FRIServer.counter", "ProactiveAssistance.counter", cp)
 connect("FTSensor.ForcePort", "ProactiveAssistance.msrForce", cp)
 connect("FTSensor.TorquePort", "ProactiveAssistance.msrTorque", cp)
 
-connect("ProactiveAssistance.desCartPosition", "FRIServer.desCartPos", cp)
+connect("ProactiveAssistance.desCartPos", "FRIServer.desCartPos", cp)
+connect("FRIServer.cmdCartPos", "ProactiveAssistance.cmdCartPos", cp)
 connect("FRIServer.msrCartPos", "ProactiveAssistance.msrCartPosition", cp)
+
+connect("ProactiveAssistance.msrJointState", "FRIServer.msrJointState", cp)
 connect("ProactiveAssistance.desAddJntTrq", "FRIServer.desAddJntTrq", cp)
+connect("ProactiveAssistance.cmdJntPos", "FRIServer.desJntPos", cp)
 connect("FRIServer.msrExtJointTorque", "ProactiveAssistance.msrExtJointTorque", cp)
+connect("FRIServer.timestamp", "ProactiveAssistance.timestamp", cp)
 
 connect("ProactiveAssistance.desKUKAWrench", "FRIServer.desAddTcpWrench", cp)
 connect("FRIServer.msrExtCartWrench", "ProactiveAssistance.msrKUKAWrench", cp)
@@ -130,11 +135,13 @@ stream("ExecutionController.start", ros.topic("/iros/pbd/dmp/execution/interface
 stream("ExecutionController.stop", ros.topic("/iros/pbd/dmp/execution/interface/stop"))
 stream("ExecutionController.startPosition", ros.topic("/iros/pbd/dmp/execution/interface/startPosition"))
 
+stream("ProactiveAssistance.impedance", ros.topic("/iros/pbd/impedance"));
+
 stream("ProactiveAssistance.assistanceStart", ros.topic("/iros/pbd/assistanceStart"));
 stream("ProactiveAssistance.assistanceStarted",ros.topic("/iros/pbd/assistanceStarted"));
 stream("ProactiveAssistance.assistanceStop", ros.topic("/iros/pbd/assistanceStop"));
 stream("ProactiveAssistance.assistanceStopped", ros.topic("/iros/pbd/assistanceStopped"));	
-
+stream("FRIServer.msrExtCartWrench", ros.topic("/iros/pbd/extWrench"));
 
 // call configure
 FRIServer.configure()
