@@ -1,0 +1,351 @@
+#include "Controller.hpp"
+
+#include <rtt/Component.hpp>
+
+#include <iostream>
+#include <fstream>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/utility.hpp>
+#include <boost/serialization/vector.hpp>
+#include <boost/filesystem.hpp>
+
+namespace iros {
+namespace orocos {
+namespace pbd {
+namespace dmp {
+namespace execution {
+
+using namespace RTT;
+using namespace RTT::os;
+using namespace std;
+using namespace boost::filesystem;
+
+	Controller::Controller(std::string const& name) : TaskContext (name), prepared {false}, execute {false}, executor {nullptr}, error() {
+		Logger::In in((this->getName()));
+
+		// Triggers the update function => "heartbeat"
+		this->ports()->addEventPort("counter", port_counter).doc("Triggers update on FRI package receive");
+
+		// Inputs
+		this->addPort("friState", port_friState).doc("Information about the FRI state");
+		this->addEventPort("prepare", port_prepare, boost::bind(&Controller::prepare, this, _1)).doc("Prepare command mode");
+		this->addEventPort("start", port_startEvent, boost::bind(&Controller::startExecution, this, _1)).doc("Starts the component on data being received");
+		this->addEventPort("stop", port_stopEvent, boost::bind(&Controller::stopExecution, this, _1)).doc("Stops the component on data being received");
+		this->addEventPort("startPosition", port_startPosEvent, boost::bind(&Controller::startPosition, this, _1)).doc("Moves to the start position on date being received");
+		this->addEventPort("in_prepared", port_in_prepared, boost::bind(&Controller::ready_to_start, this, _1)).doc("Receives when preparation finished");
+		this->addEventPort("in_start_pos_reached", port_in_start_pos_reached, boost::bind(&Controller::start_pos_reached, this, _1)).doc("Receives when preparation finished");
+
+		// Outputs
+		this->addPort("out_prepared", port_out_prepared).doc("Outputs when preparation finished");
+		this->addPort("out_finished", port_out_finished).doc("Outputs when finished executing");
+		this->addPort("out_start_pos_reached", port_out_start_pos_reached).doc("Outputs when satrt position was reached");
+		this->addPort("desStartState", port_start_state).doc("Outputs desired state");
+		this->addPort("desState", port_state_cmd).doc("Outputs desired state");
+		this->addPort("msrState", port_state_msr).doc("receives current state");
+
+		this->addPort("canonical", port_canonical).doc("Outputs the current value of the canonical system");
+		this->addPort("temporal_coupling", port_temp_coupling).doc("Outputs the current temporal coupling term");
+		
+// Setup maximum vector size
+		port_state_cmd.setDataSample(vector<double>(21));
+
+		slow_down = 1;
+
+		log(Debug) << "Execution constructed !" << endlog();
+	}
+
+	bool Controller::configureHook(){
+		Logger::In in((this->getName()));
+
+		// Setup connection with KUKAInterface
+		TaskContext::PeerList peerList = getPeerList();
+		if (1 != peerList.size()) {
+			log(Error) << ("Failed to configure Execution. There should be exactly one peer.") << endlog();
+			return false;
+		}
+		KUKAInterface = getPeer(peerList.front());
+
+		prepare_execution = KUKAInterface->getOperation("prepare");
+
+		log(Debug) << "Execution configured !" << endlog();
+		return true;
+	}
+
+	bool Controller::startHook(){
+		Logger::In in((this->getName()));
+
+
+		log(Debug) << "Execution started !" << endlog();
+		return true;
+	}
+
+	void Controller::updateHook(){
+		tFriIntfState friState;
+		port_friState.read(friState);
+
+		// Only do something when the execute flag is set
+		if(execute) {
+			Logger::In in((this->getName()));
+			static size_t ctr = 0;
+			size_t elems = params.goal.size(); // Determine size of the goal (number of elements)
+
+			vector<double> deviation_from_goal(elems);
+
+			TimeService::Seconds current_time = TimeService::Instance()->getSeconds(start_ticks) / slow_down;
+			//double dt = current_time - last_iteration_time;
+			last_iteration_time = current_time;
+			double dt = friState.desiredCmdSampleTime; // Get sample time
+
+
+			// Determine current error (deviation from desired state)
+			if(true && ctr > 0) {
+				double alpha = 5;
+
+				vector<double> cur_error(elems), derror(elems), coupling(elems);
+				vector<double> state_msr;
+
+				
+				// Wait for data
+				if(port_state_msr.read(state_msr) == NoData) {
+					log(Warning) << "No state measurements have been received yet" << endlog();
+
+				} else {
+					double max_rel_error = 0;
+					log(Info) << "Deviation from goal: " ;
+					for(size_t i = 0; i < elems; i++) {
+						cur_error[i] = state_msr[i] - last_state_cmd[i]; // Difference between commanded and measured state
+						deviation_from_goal[i] = state_msr[i]-goal_state[i]; // Difference between goal and measured state, added by Martin Tykal
+						error[i] = cur_error[i];
+						if(fabs(error[i]/max_allowed_error[i]) > max_rel_error)
+							max_rel_error = fabs(error[i]/max_allowed_error[i]);
+						log(Info) << deviation_from_goal[i];
+					}
+					log(Info) << endlog();
+					for(size_t i = 0;i < elems; i++){
+						if(deviation_from_goal[i]<0.01){
+							goal_reached = true;
+							log(Info) << "Goal for joint " <<i <<"reached!" << endlog();
+						}else{
+							return;
+						}
+					}
+					max_rel_error = max_rel_error > 1 ? 1 : max_rel_error; // Trim to 1
+					//double cur_x = params.canonical->getTimeFactor(current_time, dt, 1, 0);
+					double max_coupling = params.canonical->getTimeStoppingCoupling(); // coupling value to stop canonical system
+					//log(Info) << "x = " << max_coupling / 3;
+					double coupling = max_coupling * max_rel_error; // Set coupling value according to the relative error
+					executor->setTimeCoupling(coupling);
+
+					// Output canonical system information to ports
+					std_msgs::Float64 coupling_msg;
+					coupling_msg.data = coupling;
+					port_temp_coupling.write(coupling_msg);
+					double cur_phase_var = executor->getCurrentPhaseVariable();
+					std_msgs::Float64 phase_var_msg;
+					phase_var_msg.data = cur_phase_var;
+					port_canonical.write(phase_var_msg);
+
+
+					if(ctr%100 == 0)
+						log(Debug) << "Max rel error = " << max_rel_error << endlog();
+					//log(Info) << "Coupling = " << coupling << endlog();
+				}
+			}
+
+
+			//vector<double> force = executor->calculateForce(current_time);
+			vector<double> state = executor->calculateState(current_time, dt, 1); // Next desired state
+			//log(Info) << 13 << endlog();
+
+			//log(Info) << "Force: " << force[0] << " " << force[1] << " " << force[2] << endlog();
+			//log(Info) << "State: " << state[0] << " " << state[1] << " " << state[2] << endlog();
+
+			port_state_cmd.write(state);
+			last_state_cmd = state;
+
+			//Added by Martin Tykal
+			log(Info) << "goal_state: ";
+			for(size_t i = 0;i<elems;i++){
+				log(Info) << goal_state[i];
+			}
+			log(Info) << endlog();
+			// TODO: stop when target reached, not after time is over, Franz
+			/*if(current_time > params.tau * 1.1) {
+				log(Info) << "Time is over" << endlog();
+				port_out_finished.write(std_msgs::Empty {});
+				execute = false;
+			}*/
+			if(current_time > params.tau * 0.8 && goal_reached){
+				log(Info) << "Goal is reached!" << endlog();
+				port_out_finished.write(std_msgs::Empty {});
+				execute = false;
+			}	
+			ctr++;
+			//log(Debug) << "Execution executes updateHook !" << endlog();
+		}
+	}
+
+	void Controller::stopHook() {
+		Logger::In in((this->getName()));
+		log(Debug) << "Execution executes stopping !" << endlog();
+	}
+
+	void Controller::cleanupHook() {
+		Logger::In in((this->getName()));
+		log(Debug) << "Execution cleaning up !" << endlog();
+	}
+
+	void Controller::prepare(RTT::base::PortInterface*) {
+		Logger::In in((this->getName()));
+
+		log(Info) << "Reading ExecutorPreperties" << endlog();
+		std_msgs::String filename_msg;
+		port_prepare.read(filename_msg);
+
+		string filename("");
+		filename.append(filename_msg.data);
+
+		goal_state.clear();
+		goal_reached = false;
+
+		try {
+			path filepath(filename);
+			if(!exists(filepath)) {
+				log(Error) << "ExecutorPreperties file not existing: " << filepath << endlog();
+				return;
+			}
+			if(!is_regular_file(filepath)) {
+				log(Error) << "ExecutorPreperties file is erroneous: " << filepath << endlog();
+				return;
+			}
+
+			log(Info) << "Filename: " << filename << endlog();
+
+			// Those four lines are needed, but shouldn't be...
+			iros::pbd::helpers::canonical::Exponential(1, 3);
+			iros::pbd::helpers::canonical::PhaseOscillator(1);
+			iros::pbd::helpers::distribution::Gaussian(1.0, 0.5);
+			iros::pbd::helpers::distribution::vonMises(1.0, 0.5);
+
+			std::ifstream ifs(filename, std::fstream::in);
+			if(ifs.fail()) {
+				log(Error) << "Could not open property file" << endlog();
+				return;
+			}
+
+			{
+				boost::archive::text_iarchive ia(ifs);
+				try {
+					ia >> params;
+				} catch(const boost::archive::archive_exception& ex) {
+					log(Error) << "Error while reading ExecutorPreperties file: " << ex.what() << endlog();
+					return;
+				}
+			}
+
+			// Set pointer to new parameter object
+			executor.reset(new iros::pbd::dmp::execution::Executor(params));
+			ifs.close();
+
+			// Determine maximum allowed error depending on the spatial scale of the component
+			error = vector<double>(params.goal.size());
+			max_allowed_error = vector<double>(params.goal.size());
+			for(size_t i = 0; i < params.goal.size(); i++) {
+				max_allowed_error[i] = params.spatialScale[i] * 0.1;
+				if(max_allowed_error[i] < 0.05)
+					max_allowed_error[i] = 0.05;
+			}
+
+			port_out_prepared.write(std_msgs::Empty {});
+
+			log(Info) << "Preparation finished" << endlog();
+			log(Debug) << "Stiffness = " << params.alpha << endlog();
+			log(Debug) << "tau = " << params.tau << endlog();
+			log(Info) << "Start pos = ";
+			for(size_t i = 0; i < params.start.size(); i++)
+				log(Info) << params.start[i] << " ";
+			log(Debug) << endlog();
+			log(Info) << "Goal = ";
+			for (size_t i=0;i<params.goal.size();i++){
+					goal_state.push_back(params.goal[i]);
+					log(Info) << goal_state[i] << " ";
+			}
+			log(Debug) << endlog();
+			log(Debug) << "Cyclic = " << params.cyclic << endlog();
+
+		} catch (const filesystem_error& ex) {
+			log(Error) << "Error while accessing ExecutorPreperties file: " << ex.what() << endlog();
+		}
+	}
+
+	void Controller::startExecution(RTT::base::PortInterface*) {
+		Logger::In in((this->getName()));
+
+		log(Info) << "Calling for preparation..." << endlog();
+		prepare_execution(); // Calls KUKAInterface->prepare
+	}
+
+	void Controller::ready_to_start(RTT::base::PortInterface*) {
+		Logger::In in((this->getName()));
+		prepared = true;
+		port_out_prepared.write(std_msgs::Empty {});
+		log(Info) << "Preparation finished" << endlog();
+
+
+		if(prepared) {
+
+			start_ticks = TimeService::Instance()->getTicks();
+			last_iteration_time = TimeService::Instance()->getSeconds(start_ticks) / slow_down;
+
+			execute = true;
+
+			log(Info) << "Executor started" << endlog();
+		} else {
+			log(Error) << "Not yet prepared" << endlog();
+		}
+	}
+
+	void Controller::start_pos_reached(RTT::base::PortInterface*) {
+		Logger::In in((this->getName()));
+		log(Info) << "Start position reached" << endlog();
+		port_out_start_pos_reached.write(std_msgs::Empty {});
+	}
+
+	void Controller::stopExecution(RTT::base::PortInterface*) {
+		Logger::In in((this->getName()));
+		this->stop();
+	}
+
+	void Controller::startPosition(RTT::base::PortInterface*) {
+		Logger::In in((this->getName()));
+		//if(prepared) {
+			vector<double> start = params.start;
+			log(Info) << "Moving to start position, vec len = " << start.size() << endlog();
+			port_start_state.write(start);
+		//} else {
+			//log(Error) << "Not yet prepared" << endlog();
+		//}
+	}
+
+
+}  // namespace execution
+}  // namespace dmp
+}  // namespace pbd
+}  // namespace orocos
+}  // namespace iros
+
+/*
+ * Using this macro, only one component may live
+ * in one library *and* you may *not* link this library
+ * with another component library. Use
+ * ORO_CREATE_COMPONENT_TYPE()
+ * ORO_LIST_COMPONENT_TYPE(Execution)
+ * In case you want to link with another library that
+ * already contains components.
+ *
+ * If you have put your component class
+ * in a namespace, don't forget to add it here too:
+ */
+ORO_CREATE_COMPONENT(iros::orocos::pbd::dmp::execution::Controller)
+
+						

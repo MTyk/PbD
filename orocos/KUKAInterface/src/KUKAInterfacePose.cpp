@@ -46,35 +46,7 @@ using namespace RTT;
 
 		double stiffnessValue;
 		double dampingValue;
-		if (ASSISTANCE) {
-			/*log(Info)<< "KUKAInterfacePose" <<endlog();
-			std::ifstream ifs(
-					"/home/intelligentrobotics/ws/pbd/Applications/params/ComplianceParameters.txt",
-					std::fstream::in);
-			{
-				boost::archive::text_iarchive ia(ifs);
-				ia >> stiffnessValue;
-				ia >> dampingValue;
-			}
-			log(Info) << "Stiffness: " << stiffnessValue << endlog();
-			log(Info) << "Damping: " << dampingValue << endlog();
-
-			stiffness.linear.x = stiffnessValue;
-			stiffness.linear.y = stiffnessValue;
-			stiffness.linear.z = stiffnessValue;
-			stiffness.angular.x = 200; 
-			stiffness.angular.y = 200; 
-			stiffness.angular.z = 200;
-
-			damping.linear.x = dampingValue;
-			damping.linear.y = dampingValue;
-			damping.linear.z = dampingValue;
-			damping.angular.x = dampingValue;
-			damping.angular.y = dampingValue;
-			damping.angular.z = dampingValue;*/
-
-		}
-
+		
 
 		Pose p {}, p_cur {};
 		port_position_measured.read(p_cur);
@@ -91,7 +63,8 @@ using namespace RTT;
 		p.orientation.w = state[6] / norm;
 		port_position.write(p);
 		port_position_ros.write(p);
-		setCartesianImpedance(stiffness, damping);
+		if(!ASSISTANCE)
+			setCartesianImpedance(stiffness, damping);
 
 		// Conversion of pose to vector
 		// The positional dimensions are just copied

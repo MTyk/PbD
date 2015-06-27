@@ -66,6 +66,7 @@
 #include "KUKACommander/set_bool.h"
 #include "KUKACommander/joint_ptp_motion.h"
 #include "KUKACommander/cart_ptp_motion.h"
+ #include "KUKACommander/set_cart_imp.h"
 #include <std_srvs/Empty.h>
 
 using namespace std;
@@ -115,12 +116,13 @@ void assistanceStarted(const std_msgs::Empty msg);
 void assistanceStopped(const std_msgs::Empty msg);
 void setImpedance(double stiffness, double damping);
 void goToStart(NodeHandle& nh);
-vector<vector<double> > calculateMatrix(vector<double> s, vector<double> t);
+vector<vector<double> > calculateMatrix(vector<vector<double> >  s, vector<vector<double> >  t);
 double calculateDistance(vector<vector<double> > matrix);
 vector<Index> calculateWarppath(vector<vector<double> > matrix);
 void dynamicTimeWarp(int counter);
 void trimVector(std::vector<double> &vec, size_t start, size_t end);
 double normVector(double x, double y, double z);
+void assistanceSigintHandler(int param);
 
 std_srvs::Empty empty;
 
@@ -141,16 +143,21 @@ geometry_msgs::Pose start_pos_cart;
 bool start_pos_recorded = false;
 bool cont = 0;
 bool rec = 0;
+bool repl = 0;
+bool attach = 0;
 
 ros::Publisher start_assistance;
 ros::Publisher stop_assistance;
 ros::Publisher send_impedance;
 ros::Subscriber isstarted_assistance;
 ros::Subscriber isstopped_assistance;
+ros::Publisher stop_executor;
+ros::Publisher notify_imitator;
 
 unique_ptr<BaseImitator> imitator;
 
 KUKACommander::set_fri_ctrl control_pos_mon;
+vector<string> filenames;
 
 int state = Start;
 
@@ -229,6 +236,10 @@ int main(int argc, char **argv) {
                         "/iros/pbd/assistanceStarted", 1, assistanceStarted);
         isstopped_assistance = nh.subscribe<std_msgs::Empty>(
                         "/iros/pbd/assistanceStopped", 1, assistanceStopped);
+        stop_executor = nh.advertise<std_msgs::Empty>(
+                        "/iros/pbd/dmp/execution/halt", 1, true);
+        notify_imitator = nh.advertise<std_msgs::Empty>(
+        				"/iros/pbd/dmp/execution/interface/finished", 1, true);
         bool run = true;
 
         while (run) {
@@ -242,6 +253,19 @@ int main(int argc, char **argv) {
                         if (rec) {
                                 state = Record;
                         } else {
+                                ROS_INFO("==============================================");
+                                ROS_INFO("Add more demonstrations or replay skill? [1|0]");
+                                ROS_INFO("==============================================");
+                                cin >> attach;
+                                if(attach){
+                                    ROS_INFO("========================================");
+                                    ROS_INFO("Which number was the last demonstration?");
+                                    ROS_INFO("========================================");
+                                    cin >> counter;
+                                    rec = 1;
+                                }else{
+                                    repl = 1;
+                                }
                                 state = Execute;
                         }
                         break;
@@ -413,9 +437,11 @@ int imitate(NodeHandle& nh,
         SimpleActionClient<EmptyAction> execution_prepare_client {
                         "/iros/pbd/dmp/imitator/execution_prepare", true };
 
-        setImpedance(1000, 0.7);
+        setImpedance(4000, 0.7);
+                    
+        filenames.clear();
 
-        ros::AsyncSpinner spinner(3); // Use 3 threads
+        ros::AsyncSpinner spinner(2); // Use 2 threads
         spinner.start();
 
         ROS_INFO("Counter: %d", counter);
@@ -464,7 +490,7 @@ int imitate(NodeHandle& nh,
                 return 0;
         }
         //Due to the motion to the start position, FRI goes into JNT_IMP, but we need CART_IMP for COMBINED
-        if(PROACTIVE&&COMBINED){
+        if(PROACTIVE&&COMBINED&&!repl){
                 ros::ServiceClient setControlModeClient = nh.serviceClient<
                 KUKACommander::set_fri_ctrl>("/KUKACommander/setControlMode");
                 KUKACommander::set_fri_ctrl control_cart_imp;
@@ -474,10 +500,17 @@ int imitate(NodeHandle& nh,
                 setControlModeClient.call(control_cart_imp);
         }
 
+        double impedances [5] = {200, 400, 800, 1600, 3200};
         if (rec)
-                setImpedance(10 + 5 * counter, 0.7);
+                setImpedance(impedances[counter-2], 0.7);
 
         ROS_INFO("Position reached.");
+
+        ROS_INFO("======================================");
+        ROS_INFO("         Start with Enter");
+        ROS_INFO("======================================");
+        cin.ignore(1);
+        cin.ignore(1);
 
         if(PROACTIVE&&rec)
                 start_assistance.publish(std_msgs::Empty { });
@@ -488,25 +521,44 @@ int imitate(NodeHandle& nh,
         ctx.environment = cmd::self::get_environment();
         cmd::child rosbag_shell = cmd::launch_shell("", ctx);
         cmd::child combine_shell = cmd::launch_shell("", ctx);
+        signal(SIGINT, assistanceSigintHandler);
         if (rec) {
-        		stringstream cmd_stream;
+                 stringstream cmd_stream;
                 string rosbag_cmd = "rosbag record -o ";
+                //cmd_stream << rosbag_cmd << bagdir << bagfile << "_" << counter << " " << bagtopic << " "<<  "/iros/pbd/desCartPos " << bagtopic2;
                 cmd_stream << rosbag_cmd << bagdir << bagfile << "_" << counter << " " << bagtopic << " "<< bagtopic2;
                 rosbag_cmd = cmd_stream.str();
                 ROS_INFO("Rosbag_cmd: %s", rosbag_cmd.c_str());
-                signal(SIGINT, SIG_IGN);
                 rosbag_shell = cmd::launch_shell(rosbag_cmd, ctx);
 
-                // stringstream cmd_stream2;
-                // string rosbag_cmd2 = "rosbag record -o ";
-                // cmd_stream2 << rosbag_cmd2 << bagdir << bagfile << "_combined" << " " << "/iros/pbd/desCartPos";
-                // rosbag_cmd2 = cmd_stream2.str();
-                // ROS_INFO("Rosbag_cmd: %s", rosbag_cmd2.c_str());
-                // combine_shell = cmd::launch_shell(rosbag_cmd2,ctx);
                 ROS_INFO(" ");
                 ROS_INFO("[Recording...]    <Stop with Ctrl+C>");
                 ROS_INFO(" ");
         }
+        if(repl){
+       		//ProactiveAssistance wont run for replays, thus KUKACommander
+       
+	        ros::ServiceClient setCartesianImpedance = nh.serviceClient<KUKACommander::set_cart_imp>("/KUKACommander/setCartesianImpedance");
+	        KUKACommander::set_cart_imp imp_srv;
+	        geometry_msgs::Twist kc_stiff, kc_damp;
+	        kc_stiff.linear.x = 5000;
+	        kc_stiff.linear.y = 5000;
+	        kc_stiff.linear.z = 5000;
+	        kc_stiff.angular.x = 300;
+	        kc_stiff.angular.y = 300;
+	        kc_stiff.angular.z = 300;
+	        kc_damp.linear.x = 0.7;
+	        kc_damp.linear.y = 0.7;
+	        kc_damp.linear.z = 0.7;
+	        kc_damp.angular.x = 0.7;
+	        kc_damp.angular.y = 0.7;
+	        kc_damp.angular.z = 0.7;
+	        imp_srv.request.stiffness = kc_stiff;
+	        imp_srv.request.damping = kc_damp;   
+	        setCartesianImpedance.call(imp_srv);
+        }
+
+
 // Start execution and wait
         ROS_INFO("Switching mode and following learned trajectory");
         EmptyGoal start_goal;
@@ -518,82 +570,50 @@ int imitate(NodeHandle& nh,
                 ROS_INFO("Execution finished!");
         }
 
-        if (rec)
-                ROS_INFO("Please stop recording");
-        rosbag_shell.wait();
-        /*combine_shell.wait();
-
-
-        //getting the files from the bag folder
-        vector<string> filenames;
-	    DIR *dir;
-	    if ((dir = opendir (bagdir.c_str())) != NULL) {
-	        while ((ent = readdir (dir)) != NULL) {
-	            filenames.push_back(ent->d_name);
-	        }
-	        closedir (dir);
-	    }
-	    //searching for the previous two bags and the combined one
-	    stringstream last_bag_stream;
-	    last_bag_stream << "stiffness_"<< counter-1;
-	    stringstream obsolete_bag_stream;
-	    obsolete_bag_stream << "stiffness_" << counter-2;
-	    stringstream combined_bag_stream;
-	    combined_bag_stream << "stiffness_combined_201";
-	    string last_bag_full_name;
-	    string obsolete_bag_full_name;
-	    string combined_bag_full_name;
-
-        rosbag::Bag combined_bag;
-	    for (string s : filenames){
-	    	if(s.find(last_bag_stream.str())!=string::npos){
-	    		last_bag_full_name = bagdir + s;
-	    	}
-	    	if(s.find(obsolete_bag_stream.str())!=string::npos){
-	    		obsolete_bag_full_name = bagdir + s;
-	    	}
-	    	if(s.find(combined_bag_stream.str())!=string::npos){
-	    		combined_bag_full_name = bagdir +s;
-	            combined_bag.open(combined_bag_full_name);
-	    	}
-
-	    }
-	    ROS_INFO("Bagfiles found");
-
-	    // The combined bagfile has the wrong topic. Rosbag does not allow to change a bagfile
-	    // You can only read or write. Thus a new bag (transformed_combined_bag) is created where the
-	    // pose is stored with the right topic.
-        string transformed_combined_bag_dir = bagdir + bagfile + "_combined.bag";
-        rosbag::Bag transformed_combined_bag(transformed_combined_bag_dir, rosbag::bagmode::Write);
-        ROS_INFO("Opening Bagfiles...");
-
-        rosbag::TopicQuery query = rosbag::TopicQuery("/iros/pbd/desCartPos");
-        rosbag::View view(combined_bag, query);
-
-        ROS_INFO("Transforming combined bagfile");
-        boost::shared_ptr<geometry_msgs::Pose> message;
-        geometry_msgs::Pose combined_pose;
-        for( rosbag::MessageInstance m : view){
-        	message = m.instantiate<geometry_msgs::Pose>();
-        	combined_pose.position = message->position;
-        	combined_pose.orientation = message->orientation;
-        	transformed_combined_bag.write(bagtopic, m.getTime(), combined_pose);
+        if (rec){
+            ROS_INFO("Please stop recording");
+            /*ROS_INFO("Recording stopped.");
+            rosbag_shell.terminate();*/
         }
-	
-		combined_bag.close();
-		transformed_combined_bag.close();
-		ROS_INFO("Transformed");
-		//Overwriting the last bagfile with the combined one and removing unnecessary files
-        cmd::child mv_shell = cmd::launch_shell("", ctx);
-	    string mv_cmd = "mv -f " +  transformed_combined_bag_dir + " " + last_bag_full_name 
-	    			+ "; rm " + combined_bag_full_name +"; rm " + obsolete_bag_full_name;
-	    ROS_INFO("MV-Cmd: %s", mv_cmd.c_str());
-	    mv_shell = cmd::launch_shell(mv_cmd, ctx);
-*/
-        //DTW
-        // if(rec)
-        //      dynamicTimeWarp(counter);
+        rosbag_shell.wait();
+        ROS_INFO("======================================");
+        ROS_INFO("         Record stopped.");
+        ROS_INFO("======================================");
+        cin.ignore(1);
+        cin.ignore(1);
+        //Get the current bag files from the folder
+        DIR *dir;
+        if ((dir = opendir (bagdir.c_str())) != NULL) {
+            while ((ent = readdir (dir)) != NULL) {
+                filenames.push_back(ent->d_name);
+            }
+            closedir (dir);
+        }
 
+        if(rec){
+            /*ROS_INFO("======================================");
+            ROS_INFO("         Power up the Warpdrive");
+            ROS_INFO("======================================");
+            cin.ignore(1);
+            cin.ignore(1);*/
+
+            // DTW
+            dynamicTimeWarp(counter);
+        }
+        
+        //Forget old recordings
+        if(counter>3 && rec){
+            stringstream bag_tag;
+            bag_tag << "stiffness_"<< counter-3;
+            string filename;
+            for (string s : filenames){
+                if(s.find(bag_tag.str())!=string::npos)
+                    filename = s;
+            }    
+            string forget_cmd = "mv -f " + bagdir + filename + " " + bagdir + "forgotten_bags"; 
+            cmd::child forget_shell = cmd::launch_shell(forget_cmd, ctx);
+            ROS_INFO("Forgot %d. iteration!", counter-3);
+        }     
         if (rec) {
                 ROS_INFO(" ");
                 ROS_INFO("======================================");
@@ -606,7 +626,6 @@ int imitate(NodeHandle& nh,
                 ROS_INFO("======================================");
                 ROS_INFO("  Replay learned skill? [1|0]");
                 ROS_INFO("======================================");
-                bool repl;
                 cin >> repl;
                 rec = !repl;
                 if (repl)
@@ -627,8 +646,8 @@ int imitate(NodeHandle& nh,
 unique_ptr<BaseImitator> initializeImitator(NodeHandle & nh) {
 
         double exp_start = 1.0;
-        double exp_decay = 3.0;
-        int num_kernels = 250;
+        double exp_decay = 1.1;
+        int num_kernels = 500;
         double stiffness = 2000;
         bool cyclic = false;
 
@@ -742,17 +761,23 @@ void setImpedance(double stiffness, double damping) {
                 stiffness = 0;
                 damping = 0.7;
         }
-        if(stiffness > 2000){
-        	stiffness = 2000;
+        if(stiffness > 5000){
+        	stiffness = 5000;
         }
         if(damping > 1.0){
         	damping = 1.0;
+        }
+        double stiffness_x;
+        if(stiffness<2000){
+        	stiffness_x=2000;
+        }else{
+        	stiffness_x=stiffness;
         }
         geometry_msgs::Twist impedance;
 
         impedance.linear.x = stiffness;
         impedance.linear.y = stiffness;
-        impedance.linear.z = stiffness;
+        impedance.linear.z = stiffness_x;
         impedance.angular.x = damping;
         impedance.angular.y = damping;
         impedance.angular.z = damping;
@@ -802,31 +827,63 @@ void goToStart(NodeHandle& nh) {
                 cartPTPMotion.call(motion_srv);
         }*/
 }
-vector<vector<double> > calculateMatrix(vector<double> s, vector<double> t) {
-	vector<vector<double> > dtw(s.size(), vector<double>(t.size()));
-	for (size_t i = 0; i < s.size(); i++) {
-		for (size_t j = 0; j < t.size(); j++) {
-			dtw[i][j] = HUGE_VAL;
-		}
-	}
-	dtw[0][0] = 0;
-	for (size_t i = 0; i < s.size(); i++) {
-		for (size_t j = 0; j < t.size(); j++) {
-			double minimum = HUGE_VAL;
-			double dist = abs(s[i] - t[j]);
-			if (i > 0)
-				minimum = dtw[i - 1][j];
-			if (j > 0)
-				minimum = min(minimum, dtw[i][j - 1]);
-			if ((i > 0) && (j > 0))
-				minimum = min(minimum, dtw[i - 1][j - 1]);
-			if ((i == 0) && (j == 0))
-				dtw[i][j] = fabs(s[i] - t[j]);
-			else
-				dtw[i][j] = minimum + dist;
-		}
-	}
-	return dtw;
+vector<vector<double> > calculateMatrix(vector<vector<double> >  s, vector<vector<double> >  t) {
+    //first normalize the trajectories
+    double sum_s=0;
+    for(size_t i=0; i<s.size();i++){
+        for(size_t j=0; j<s[0].size();j++){
+            sum_s += (s[i][j] * s[i][j]);
+        }
+    }
+    double norm_s = sqrt(sum_s);
+    ROS_INFO("Norm_s: %f", norm_s);
+    for(size_t i=0; i<s.size();i++){
+        for(size_t j=0; j<s[0].size();j++){
+            s[i][j]=s[i][j]/norm_s;
+        }
+    }
+
+    double sum_t=0;
+    for(size_t i=0; i<t.size();i++){
+        for(size_t j=0; j<t[0].size();j++){
+            sum_t += (t[i][j] * t[i][j]);
+        }
+    }
+    double norm_t = sqrt(sum_t);
+
+    ROS_INFO("Norm_t: %f", norm_t);
+    for(size_t i=0; i<t.size();i++){
+        for(size_t j=0; j<t[0].size();j++){
+            t[i][j]=t[i][j]/norm_t;
+        }
+    }
+    ROS_INFO("Calc Matrix...");
+
+    vector<vector<double> > dtw(s[0].size(), vector<double>(t[0].size()));
+
+    for (size_t i = 0; i < s[0].size(); i++) {
+        for (size_t j = 0; j < t[0].size(); j++) {
+            dtw[i][j] = HUGE_VAL;
+        }
+    }
+    dtw[0][0] = 0;
+    for (size_t i = 0; i < s[0].size(); i++) {
+        for (size_t j = 0; j < t[0].size(); j++) {
+            double minimum = HUGE_VAL;
+            double dist = pow((s[0][i] - t[0][j]),2)+pow((s[1][i] - t[1][j]),2)+pow((s[2][i] - t[2][j]),2);
+            if (i > 0)
+                minimum = dtw[i - 1][j];
+            if (j > 0)
+                minimum = min(minimum, dtw[i][j - 1]);
+            if ((i > 0) && (j > 0))
+                minimum = min(minimum, dtw[i - 1][j - 1]);
+            if ((i == 0) && (j == 0))
+                dtw[i][j] = dist;
+            else
+                dtw[i][j] = minimum + dist;
+        }
+    }
+    return dtw;
 }
 double calculateDistance(vector<vector<double> > matrix) {
 	int length = matrix.size();
@@ -887,55 +944,45 @@ vector<Index> calculateWarppath(vector<vector<double> > matrix) {
 }
 
 void dynamicTimeWarp(int counter){
-    stringstream bag_tag1,bag_tag2;
-    bag_tag1 << "stiffness_"<< counter-1;
-    bag_tag2 << "stiffness_"<< counter;
-
-    cout << "bag_name1: " << bag_tag1.str() << "bag_name2: " << bag_tag2.str() << endl;
-
-    vector<string> filenames;
-    DIR *dir;
-    if ((dir = opendir (bagdir.c_str())) != NULL) {
-        while ((ent = readdir (dir)) != NULL) {
-            filenames.push_back(ent->d_name);
-            printf ("%s\n", ent->d_name);
-        }
-        closedir (dir);
-    }
-
-    rosbag::Bag bag1;
-    rosbag::Bag bag2;
+    stringstream bag_tag;
+    bag_tag << "stiffness_"<< counter;
+    stringstream bag_tag_old;
+    bag_tag_old << "stiffness_" << counter-1;
+    
+    rosbag::Bag bag;
+    rosbag::Bag bag_old;
+    
+    ROS_INFO("Bag: %s", bag_tag.str().c_str());
+    ROS_INFO("Bag_old: %s", bag_tag_old.str().c_str());
     for (string s : filenames){
-        if(s.find(bag_tag1.str())!=string::npos){
-            stringstream bagfile1;
-            bagfile1 << bagdir << s;
-            bag1.open(bagfile1.str());
-        }else if (s.find(bag_tag2.str())!=string::npos){
-            stringstream bagfile2;
-            bagfile2 << bagdir << s;
-            bag2.open(bagfile2.str());
+        ROS_INFO("%s", s.c_str()); 
+        if(s.find(bag_tag.str())!=string::npos){
+            ROS_INFO("Bag found: %s", s.c_str());
+            bag.open(bagdir+s);
         }
+        if(s.find(bag_tag_old.str())!=string::npos){
+            ROS_INFO("Bag found: %s", s.c_str());
+            bag_old.open(bagdir+s);
+        }    
     }
-    string bag_name1= bag1.getFileName();
-    string bag_name2= bag2.getFileName();
+    string bag_name= bag.getFileName();
+    string bag_old_name = bag_old.getFileName();
 
-    rosbag::TopicQuery query("");
-    query = rosbag::TopicQuery(bagtopic);
+    rosbag::TopicQuery query_new = rosbag::TopicQuery(bagtopic);
+    rosbag::TopicQuery query_old = rosbag::TopicQuery("/iros/pbd/desCartPos");
 
-    rosbag::View view1(bag1, query);
-    rosbag::View view2(bag2, query);
+    rosbag::View view_new(bag, query_new);
+    rosbag::View view_old(bag_old, query_new);
 
     std::vector<double> t1_x, t1_y, t1_z, t1_a, t1_b, t1_c, t1_d;
     std::vector<double> t2_x, t2_y, t2_z, t2_a, t2_b, t2_c, t2_d;
     std::vector<ros::Time> time1;
     std::vector<ros::Time> time2;
-    std::vector<double> t1_x_dtw, t1_y_dtw, t1_z_dtw, t1_a_dtw, t1_b_dtw, t1_c_dtw, t1_d_dtw;
-    std::vector<double> t2_x_dtw, t2_y_dtw, t2_z_dtw, t2_a_dtw, t2_b_dtw, t2_c_dtw, t2_d_dtw;
     std::vector<ros::Time> time1_dtw;
     std::vector<ros::Time> time2_dtw;
 
     boost::shared_ptr<geometry_msgs::Pose> message1;
-    for(rosbag::MessageInstance const m : view1){
+    for(rosbag::MessageInstance const m : view_new){
             message1 = m.instantiate<geometry_msgs::Pose>();
             t1_x.push_back(message1->position.x);
             t1_y.push_back(message1->position.y);
@@ -948,7 +995,7 @@ void dynamicTimeWarp(int counter){
     }
 
     boost::shared_ptr<geometry_msgs::Pose> message2;
-    for(rosbag::MessageInstance const m : view2){
+    for(rosbag::MessageInstance const m : view_old){
             message2 = m.instantiate<geometry_msgs::Pose>();
             t2_x.push_back(message2->position.x);
             t2_y.push_back(message2->position.y);
@@ -959,102 +1006,82 @@ void dynamicTimeWarp(int counter){
             t2_d.push_back(message1->orientation.w);
             time2.push_back(m.getTime());
     }
+    vector<vector<double> > t1, t2;
+    vector<vector<double> > t1_dtw, t2_dtw;
+    vector<double> dummy;
+    vector<vector<double> > t1_dtw_cut(3, dummy), t2_dtw_cut(3, dummy);
+    t1.push_back(t1_x);
+    t1.push_back(t1_y);
+    t1.push_back(t1_z);
+    t2.push_back(t2_x);
+    t2.push_back(t2_y);
+    t2.push_back(t2_z);
 
-    ROS_INFO("Bagsize 1: %lu",bag1.getSize());
-    ROS_INFO("Bagsize 2: %lu",bag2.getSize());
     ROS_INFO("t1_x size: %lu",t1_x.size());
     ROS_INFO("t2_x size: %lu",t2_x.size());
 
-    vector< vector<double> > distMatrix = calculateMatrix(t1_x,t2_x);
+    vector< vector<double> > distMatrix = calculateMatrix(t1,t2);
     ROS_INFO("Distance: %f",calculateDistance(distMatrix) );
     vector<Index> warpPath = calculateWarppath(distMatrix);
     cout << warpPath[0].x << endl; 
 
     std::reverse(warpPath.begin(),warpPath.end());
     ROS_INFO("reversed");
-    t1_x_dtw.resize(warpPath.size());
-    t1_y_dtw.resize(warpPath.size());
-    t1_z_dtw.resize(warpPath.size());
-    t1_a_dtw.resize(warpPath.size());
-    t1_b_dtw.resize(warpPath.size());
-    t1_c_dtw.resize(warpPath.size());
-    t1_d_dtw.resize(warpPath.size());
-    time1_dtw.resize(warpPath.size());
-
-    t2_x_dtw.resize(warpPath.size());
-    t2_y_dtw.resize(warpPath.size());
-    t2_z_dtw.resize(warpPath.size());
-    t2_a_dtw.resize(warpPath.size());
-    t2_b_dtw.resize(warpPath.size());
-    t2_c_dtw.resize(warpPath.size());
-    t2_d_dtw.resize(warpPath.size());
-    time2_dtw.resize(warpPath.size());
+    t1_dtw =t1;
+    t2_dtw =t2;
+    t1_dtw[0].resize(warpPath.size());
+    t2_dtw[0].resize(warpPath.size());
+    t1_dtw[1].resize(warpPath.size());
+    t2_dtw[1].resize(warpPath.size());
+    t1_dtw[2].resize(warpPath.size());
+    t2_dtw[2].resize(warpPath.size());
 
     for(size_t i = 0;i < warpPath.size(); i++){
-            t1_x_dtw[i] = t1_x[warpPath[i].x];
-            t1_y_dtw[i] = t1_y[warpPath[i].x];
-            t1_z_dtw[i] = t1_z[warpPath[i].x];
-            t1_a_dtw[i] = t1_a[warpPath[i].x];
-            t1_b_dtw[i] = t1_b[warpPath[i].x];
-            t1_c_dtw[i] = t1_c[warpPath[i].x];
-            t1_d_dtw[i] = t1_d[warpPath[i].x];
-            time1_dtw[i] = time1[warpPath[i].x];
-    
-            t2_x_dtw[i] = t2_x[warpPath[i].y];
-            t2_y_dtw[i] = t2_y[warpPath[i].y];
-            t2_z_dtw[i] = t2_z[warpPath[i].y];
-            t2_a_dtw[i] = t2_a[warpPath[i].y];
-            t2_b_dtw[i] = t2_b[warpPath[i].y];
-            t2_c_dtw[i] = t2_c[warpPath[i].y];
-            t2_d_dtw[i] = t2_d[warpPath[i].y];
-            time2_dtw[i] = time2[warpPath[i].y];
+            t1_dtw[0][i] = t1[0][warpPath[i].x];
+            t1_dtw[1][i] = t1[1][warpPath[i].x];
+            t1_dtw[2][i] = t1[2][warpPath[i].x];
+            t2_dtw[0][i] = t2[0][warpPath[i].y];
+            t2_dtw[1][i] = t2[1][warpPath[i].y];
+            t2_dtw[2][i] = t2[2][warpPath[i].y];
+       
     }
+    ROS_INFO("Warped");
 
-    /*double thresh = 0.00001;
-    size_t start = 0;
-    size_t end = 0;
-    double dist; 
-    for (size_t i = 1; i < warpPath.size(); i++){
-        dist = normVector(t1_x_dtw[i],t1_y_dtw[i],t1_z_dtw[i])-normVector(t1_x_dtw[i-1],t1_y_dtw[i-1],t1_z_dtw[i-1]);
-        ROS_INFO("Dist: %.10f", dist);
-    	if(dist>thresh){
-			start=i;
-            ROS_INFO("Cutoff %d elements from the start.", i);
-            break;
+    //DTW stretches the trajectories, resulting in robot waiting at certain positions
+    //This also increases replaytime (1. run: 30s, 4. run: 120s)
+    //Thus all the positions where the robot waits will be cut out
+    size_t cut_ctr_1=0;
+    size_t cut_ctr_2=0;
+    for(size_t i=1; i<warpPath.size(); i++){
+        double value1_t1 = sqrt(t1_dtw[0][i]*t1_dtw[0][i]+t1_dtw[1][i]*t1_dtw[1][i]+t1_dtw[2][i]*t1_dtw[2][i]);
+        double value2_t1 = sqrt(t1_dtw[0][i-1]*t1_dtw[0][i-1]+t1_dtw[1][i-1]*t1_dtw[1][i-1]+t1_dtw[2][i-1]*t1_dtw[2][i-1]);
+        double value1_t2 = sqrt(t2_dtw[0][i]*t2_dtw[0][i]+t2_dtw[1][i]*t2_dtw[1][i]+t2_dtw[2][i]*t2_dtw[2][i]);
+        double value2_t2 = sqrt(t2_dtw[0][i-1]*t2_dtw[0][i-1]+t2_dtw[1][i-1]*t2_dtw[1][i-1]+t2_dtw[2][i-1]*t2_dtw[2][i-1]);
+
+        if(value1_t1!=value2_t1){
+            t1_dtw_cut[0].push_back(t1_dtw[0][i-1]);
+            t1_dtw_cut[1].push_back(t1_dtw[1][i-1]);
+            t1_dtw_cut[2].push_back(t1_dtw[2][i-1]);
+        }else{
+            cut_ctr_1++;
         }
-	}
-    
-    for (size_t i = warpPath.size(); i<=0; i--){
-        dist = normVector(t1_x_dtw[i],t1_y_dtw[i],t1_z_dtw[i])-normVector(t1_x_dtw[i-1],t1_y_dtw[i-1],t1_z_dtw[i-1]);
-		if(dist>thresh){
-			end=i;
-            ROS_INFO("Cutoff %d elements from the end.",i);
-            break;
-        }    
+        if(value1_t2!=value2_t2){
+            t2_dtw_cut[0].push_back(t2_dtw[0][i-1]);
+            t2_dtw_cut[1].push_back(t2_dtw[1][i-1]);
+            t2_dtw_cut[2].push_back(t2_dtw[2][i-1]);
+        }else{
+            cut_ctr_2++;
+        }
     }
-    
-    trimVector(t1_x_dtw, start, end);
-    trimVector(t1_y_dtw, start, end);
-    trimVector(t1_z_dtw, start, end);
-    trimVector(t1_a_dtw, start, end);
-    trimVector(t1_b_dtw, start, end);
-    trimVector(t1_c_dtw, start, end);
-    trimVector(t1_d_dtw, start, end);
-	
-	trimVector(t2_x_dtw, start, end);
-    trimVector(t2_y_dtw, start, end);
-    trimVector(t2_z_dtw, start, end);
-    trimVector(t2_a_dtw, start, end);
-    trimVector(t2_b_dtw, start, end);
-    trimVector(t2_c_dtw, start, end);
-    trimVector(t2_d_dtw, start, end);*/
-
-    ROS_INFO("t1_dtw size: %lu",t1_x_dtw.size());
-
-    stringstream bagfile1_dtw;
-    bagfile1_dtw << bagdir << bagfile << "_" << counter-1 << "_dtw" << ".bag";
-    rosbag::Bag bag1_dtw(bagfile1_dtw.str(), rosbag::bagmode::Write);
-    string bag_name_dtw1 = bag1_dtw.getFileName();
+    ROS_INFO("Cut: %zu %zu",cut_ctr_1, cut_ctr_2);
+    stringstream bagfile_dtw;
+    bagfile_dtw << bagdir << bagfile << "_" << counter << "_dtw" << ".bag";
+    stringstream bagfile_old_dtw;
+    bagfile_old_dtw << bagdir << bagfile << "_" << counter-1 << "_dtw" << ".bag";
+    rosbag::Bag bag_dtw(bagfile_dtw.str(), rosbag::bagmode::Write);
+    rosbag::Bag bag_old_dtw(bagfile_old_dtw.str(), rosbag::bagmode::Write);
+    string bag_name_dtw = bag_dtw.getFileName();
+    string bag_old_name_dtw = bag_old_dtw.getFileName();
     ros::Time now = ros::Time::now();
     ros::Time bagtime = now;
     ros::Duration dt(time1[10]-time1[9]);
@@ -1065,47 +1092,34 @@ void dynamicTimeWarp(int counter){
     pose_dtw.orientation.z = t1_c[0];            
     pose_dtw.orientation.w = t1_d[0];
     
-    for(size_t i=0; i<warpPath.size();i++){
-    		bagtime = bagtime + dt;
-            pose_dtw.position.x = t1_x_dtw[rosbag_ctr];
-            pose_dtw.position.y = t1_y_dtw[rosbag_ctr];
-            pose_dtw.position.z = t1_z_dtw[rosbag_ctr];
-            bag1_dtw.write(bagtopic, bagtime, pose_dtw);
+    for(size_t i=0; i<t1_dtw_cut[0].size();i++){
+            bagtime = bagtime + dt;
+            pose_dtw.position.x = t1_dtw_cut[0][i];
+            pose_dtw.position.y = t1_dtw_cut[1][i];
+            pose_dtw.position.z = t1_dtw_cut[2][i];
+            bag_old_dtw.write(bagtopic, bagtime, pose_dtw);
 
             rosbag_ctr++;          
     }
 
     ROS_INFO("Rosbagctr: %d", rosbag_ctr);
-    bag1.close();
-    bag1_dtw.close();
-    stringstream bagfile2_dtw;
-    bagfile2_dtw << bagdir << bagfile << "_" << counter << "_dtw" << ".bag";
-    rosbag::Bag bag2_dtw(bagfile2_dtw.str(), rosbag::bagmode::Write);
-    string bag_name_dtw2 = bag2_dtw.getFileName();
-
-    bagtime = bagtime + ros::Duration(20.0);
+   
+   	bag_old.close();
+   	bag_old_dtw.close();
+    bagtime = now;
 
     rosbag_ctr=0;
-    for(size_t i=0;i<warpPath.size();i++){
-            //TODO Check for msg_typename
-    		bagtime = bagtime + dt;
-            pose_dtw.position.x = t2_x_dtw[rosbag_ctr];
-            pose_dtw.position.y = t2_y_dtw[rosbag_ctr];
-            pose_dtw.position.z = t2_z_dtw[rosbag_ctr];
-            // pose_dtw.orientation.x = t2_a_dtw[rosbag_ctr];            
-            // pose_dtw.orientation.y = t2_b_dtw[rosbag_ctr];            
-            // pose_dtw.orientation.z = t2_c_dtw[rosbag_ctr];            
-            // pose_dtw.orientation.w = t2_d_dtw[rosbag_ctr];  
-            
-            bag2_dtw.write(bagtopic, bagtime, pose_dtw);
+    for(size_t i=0;i<t2_dtw_cut[0].size();i++){
+            bagtime = bagtime + dt;
+            pose_dtw.position.x = t2_dtw_cut[0][i];
+            pose_dtw.position.y = t2_dtw_cut[1][i];
+            pose_dtw.position.z = t2_dtw_cut[2][i];
+            bag_dtw.write(bagtopic, bagtime, pose_dtw);
             
             rosbag_ctr++;
     }
-    bag2.close();
-    bag2_dtw.close();
-
-    ROS_INFO("Bagsize_dtw 1: %lu",bag1_dtw.getSize());
-    ROS_INFO("Bagsize_dtw 2: %lu",bag2_dtw.getSize());
+    bag.close();
+    bag_dtw.close();
 
     cmd::context ctx;
     ctx.stdin_behavior = cmd::inherit_stream();
@@ -1113,33 +1127,14 @@ void dynamicTimeWarp(int counter){
     ctx.environment = cmd::self::get_environment();
     cmd::child rosbag_shell = cmd::launch_shell("", ctx);
 
-    //Delte unwarped bagfiles
-    // cmd_stream << "rm " << bagdir << "/" << bag1.getFileName();
-    // rosbag_cmd = cmd_stream.str();
-    // rosbag_shell = cmd::launch_shell(rosbag_cmd, ctx);
-    // cmd_stream.clear();
-    // cmd_stream << "rm " << bagdir << "/" << bag2.getFileName();
-    // rosbag_cmd = cmd_stream.str();
-    // rosbag_shell = cmd::launch_shell(rosbag_cmd, ctx);
-    // cmd_stream.clear();
-
-    //Rename bagfiles
-
-    stringstream cmd_stream;
-    string rosbag_cmd;
-    cmd_stream << "mv -f " << bag_name_dtw1 << " " << bag_name1;
-    rosbag_cmd = cmd_stream.str();
+    string rosbag_cmd = "mv -f " + bag_name_dtw + " " + bag_name +"; mv -f " + bag_old_name_dtw + " " + bag_old_name ;
+	//string rosbag_cmd = "mv -f " + bag_name_dtw + " " + bag_name;
     ROS_INFO("MV-Cmd: %s", rosbag_cmd.c_str());
     rosbag_shell = cmd::launch_shell(rosbag_cmd, ctx);
     rosbag_shell.wait();
-    stringstream cmd_stream2;   
-    cmd_stream2 << "mv -f " << bag_name_dtw2 << " " << bag_name2;
-    rosbag_cmd = cmd_stream2.str();
-    ROS_INFO("MV-Cmd: %s", rosbag_cmd.c_str());
-    rosbag_shell = cmd::launch_shell(rosbag_cmd, ctx);
-    rosbag_shell.wait();
-    cmd_stream.clear();
+    
 }
+
 
 void trimVector(std::vector<double> &vec, size_t start, size_t end){
 	vec.erase(vec.begin(),vec.begin()+start);
@@ -1148,3 +1143,17 @@ void trimVector(std::vector<double> &vec, size_t start, size_t end){
 double normVector(double x, double y, double z){
 	return sqrt(pow(x,2)+pow(y,2)+pow(z,2));
 }
+
+void assistanceSigintHandler(int param){
+    ROS_INFO("SigInt caught!");
+     stop_executor.publish(std_msgs::Empty { });
+     notify_imitator.publish(std_msgs::Empty { });
+
+}
+
+
+/*
+*   1. KIM may not injure a human being or, through inaction, allow a human being to come to harm.
+*   2. KIM must obey the orders given it by human beings, except where such orders would conflict with the First Law.
+*   3. KIM must protect its own existence as long as such protection does not conflict with the First or Second Laws.
+*/

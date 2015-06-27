@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/intelligentrobotics/ws/orocos/pbd/dmp/Execution/devel/setup.sh

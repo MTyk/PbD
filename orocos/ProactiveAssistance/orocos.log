@@ -1,7 +1,7 @@
 0.000 [ Info   ][Logger] No ORO_LOGLEVEL environment variable set.
 0.000 [ Info   ][Logger]  OROCOS version '2.6.0' compiled with GCC 4.6.3. Running in Xenomai.
 0.000 [ Info   ][Logger] Orocos Logging Activated at level : [ Warning] ( 4 ) 
-0.000 [ Info   ][Logger] Reference System Time is : 110084337387583 ticks ( 33432.7 seconds ).
+0.000 [ Info   ][Logger] Reference System Time is : 395082877427773 ticks ( 119999 seconds ).
 0.000 [ Info   ][Logger] Logging is relative to this time.
 0.003 [ Info   ][Logger] Xenomai Periodic Timer runs in preemptive 'one-shot' mode.
 0.003 [ Info   ][Logger] Installing SIGXCPU handler.
@@ -9,8 +9,8 @@
 0.003 [ Info   ][Logger] plugin 'rtt' not loaded before.
 0.003 [ Info   ][Logger] Loading plugin libraries from directory /home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/./plugins ...
 0.003 [ Info   ][Logger] Loaded RTT Service 'scripting' from 'rtt-scripting'
-0.003 [ Info   ][Logger] Loaded RTT Service 'marshalling' from 'rtt-marshalling'
-0.003 [ Info   ][Logger] typekit 'rtt' not loaded before.
+0.004 [ Info   ][Logger] Loaded RTT Service 'marshalling' from 'rtt-marshalling'
+0.004 [ Info   ][Logger] typekit 'rtt' not loaded before.
 0.004 [ Info   ][Logger] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/./types ...
 0.016 [ Info   ][TypekitRepository::Import] Loading Typekit rtt-types.
 0.016 [ Info   ][Logger] Loaded RTT TypeKit/Transport 'rtt-types' from 'rtt-typekit'
@@ -24,596 +24,598 @@
 0.028 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for float
 0.028 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for int
 0.028 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for string
-0.028 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for uint
-0.028 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for void
-0.028 [ Info   ][Logger] Loaded RTT TypeKit/Transport 'rtt-corba-types' from 'rtt-transport-corba'
-0.030 [ Info   ][TypekitRepository::Import] Loading Transport mqueue://rtt-types.
-0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for array
-0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for bool
-0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for char
-0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for double
-0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for float
-0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for int
-0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for uint
-0.030 [ Info   ][Logger] Loaded RTT TypeKit/Transport 'rtt-mqueue-transport' from 'rtt-transport-mqueue'
-0.030 [ Info   ][Logger] No RTT_COMPONENT_PATH set. Using default: /home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos
-0.030 [ Info   ][Logger] OCL factory set for real-time logging
-0.030 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='Deployer'
+0.029 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for uint
+0.029 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for void
+0.029 [ Info   ][Logger] Loaded RTT TypeKit/Transport 'rtt-corba-types' from 'rtt-transport-corba'
+0.031 [ Info   ][TypekitRepository::Import] Loading Transport mqueue://rtt-types.
+0.031 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for array
+0.031 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for bool
+0.031 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for char
+0.031 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for double
+0.031 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for float
+0.031 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for int
+0.031 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for uint
+0.031 [ Info   ][Logger] Loaded RTT TypeKit/Transport 'rtt-mqueue-transport' from 'rtt-transport-mqueue'
+0.031 [ Info   ][Logger] No RTT_COMPONENT_PATH set. Using default: /home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos
+0.031 [ Info   ][Logger] OCL factory set for real-time logging
+0.031 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='Deployer'
 0.031 [ Info   ][Deployer] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
 0.031 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='GlobalEngine'
-0.031 [ Info   ][GlobalEngine] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
-0.032 [ Info   ][Logger] No site file was found. Importing 'ocl' by default.
-0.074 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/ocl ...
-0.088 [ Info   ][DeploymentComponent::import] Loaded multi component library '/home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/ocl/liborocos-ocl-reporting-netcdf-xenomai.so'
-0.088 [ Info   ][DeploymentComponent::import] Loaded component type 'OCL::NetcdfReporting'
-0.089 [ Info   ][DeploymentComponent::import] Loaded component type 'OCL::LuaComponent'
-0.090 [ Info   ][DeploymentComponent::import] Loaded component type 'OCL::HelloWorld'
-0.092 [ Info   ][DeploymentComponent::import] Loaded multi component library '/home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/ocl/liborocos-ocl-timer-xenomai.so'
-0.093 [ Info   ][DeploymentComponent::import] Loaded component type 'OCL::LuaTLSFComponent'
-0.096 [ Info   ][DeploymentComponent::import] Loaded component type 'OCL::logging::Log4cxxAppender'
-0.096 [ Info   ][DeploymentComponent::import] Loaded multi component library '/home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/ocl/liborocos-ocl-reporting-xenomai.so'
-0.098 [ Info   ][DeploymentComponent::import] Loaded multi component library '/home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/ocl/liborocos-ocl-common-xenomai.so'
-0.099 [ Info   ][DeploymentComponent::import] Loaded multi component library '/home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/ocl/liborocos-ocl-logging-xenomai.so'
-0.099 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/ocl/types ...
-0.102 [ Info   ][TypekitRepository::Import] Loading Typekit OCLTypekit.
-0.103 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'OCLTypekit' from 'ocl'
-0.103 [ Info   ][DeploymentComponent::import] Loading plugin libraries from directory /home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/ocl/plugins ...
-0.104 [ Info   ][DeploymentComponent::import] Loaded RTT Service 'os' from 'os'
-0.105 [ Info   ][DeploymentComponent::import] Loaded RTT Service 'LuaTLSF' from 'rttlua-tlsf-plugin'
-0.105 [ Info   ][DeploymentComponent::import] Loaded RTT Service 'print' from 'print'
-0.106 [ Info   ][DeploymentComponent::import] Loaded RTT Service 'Lua' from 'rttlua-plugin'
-0.106 [ Info   ][Logger] Loading Service or Plugin scripting in TaskContext Deployer
-0.108 [ Info   ][Logger] Found complete interface of requested service 'scripting'
-0.108 [ Info   ][Logger] Running Script deploy/ProactiveAssistance.ops ...
-0.314 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/rtt_ros_integration/rtt_rospack/lib/orocos/xenomai ...
-0.314 [ Info   ][DeploymentComponent::import] Loading plugin libraries from directory /home/intelligentrobotics/ws/orocos/rtt_ros_integration/rtt_rospack/lib/orocos/xenomai/plugins ...
-0.315 [ Info   ][DeploymentComponent::import] Loaded RTT Plugin 'rospack' from 'rtt_rospack'
-0.315 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/rtt_ros_integration/rtt_rosnode/lib/orocos/xenomai ...
-0.315 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/rtt_ros_integration/rtt_rosnode/lib/orocos/xenomai/types ...
-0.345 [ Info   ][TypekitRepository::Import] Loading Typekit ros-primitives.
-0.345 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'ros-primitives' from 'rtt-ros-primitives-typekit'
-0.345 [ Info   ][DeploymentComponent::import] Loading plugin libraries from directory /home/intelligentrobotics/ws/orocos/rtt_ros_integration/rtt_rosnode/lib/orocos/xenomai/plugins ...
-0.355 [ Info   ][DeploymentComponent::import] Initializing ROS node
-0.365 [ Info   ][DeploymentComponent::import] ROS node spinner started
-0.365 [ Info   ][DeploymentComponent::import] Loaded RTT Plugin 'ros_integration' from 'rtt_rosnode'
-0.367 [ Info   ][DeploymentComponent::import] Loaded RTT Service 'rosparam' from 'rtt_rosparam_service'
-0.375 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/rtt_ros_comm/rtt_std_msgs/lib/orocos/xenomai ...
-0.376 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/rtt_ros_comm/rtt_std_msgs/lib/orocos/xenomai/types ...
-0.387 [ Info   ][TypekitRepository::Import] Loading Transport ros://ros-std_msgs.
-0.388 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'rtt-ros-std_msgs-transport' from 'rtt-std_msgs-ros-transport'
-0.473 [ Info   ][TypekitRepository::Import] Loading Typekit ros-std_msgs.
-0.473 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/MultiArrayDimension
-0.473 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/UInt8MultiArray
-0.473 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Duration
-0.473 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/UInt16
-0.473 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/UInt16MultiArray
-0.473 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Bool
-0.473 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/String
-0.473 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Int64
-0.473 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/UInt32MultiArray
-0.473 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Float32
-0.473 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Float64
-0.474 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Int32MultiArray
-0.474 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Int16
-0.474 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Time
-0.474 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/MultiArrayLayout
-0.474 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/ColorRGBA
-0.474 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Byte
-0.474 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Float32MultiArray
-0.474 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/ByteMultiArray
-0.474 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/UInt64MultiArray
-0.474 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Int8MultiArray
-0.474 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Int64MultiArray
-0.474 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/UInt32
-0.474 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Char
-0.474 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Empty
-0.475 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Int32
-0.475 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/UInt8
-0.475 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Float64MultiArray
-0.475 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/UInt64
-0.475 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Header
-0.475 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Int16MultiArray
-0.475 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Int8
-0.475 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'ros-std_msgs' from 'rtt-std_msgs-typekit'
-0.475 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/rtt_ros_comm/rtt_rosgraph_msgs/lib/orocos/xenomai ...
-0.475 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/rtt_ros_comm/rtt_rosgraph_msgs/lib/orocos/xenomai/types ...
-0.481 [ Info   ][TypekitRepository::Import] Loading Typekit ros-rosgraph_msgs.
-0.481 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'ros-rosgraph_msgs' from 'rtt-rosgraph_msgs-typekit'
-0.482 [ Info   ][TypekitRepository::Import] Loading Transport ros://ros-rosgraph_msgs.
-0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /rosgraph_msgs/Clock
-0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /rosgraph_msgs/Log
-0.482 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'rtt-ros-rosgraph_msgs-transport' from 'rtt-rosgraph_msgs-ros-transport'
-0.482 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/rtt_common_msgs/rtt_geometry_msgs/lib/orocos/xenomai ...
-0.483 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/rtt_common_msgs/rtt_geometry_msgs/lib/orocos/xenomai/types ...
-0.543 [ Info   ][TypekitRepository::Import] Loading Typekit ros-geometry_msgs.
-0.545 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'ros-geometry_msgs' from 'rtt-geometry_msgs-typekit'
-0.554 [ Info   ][TypekitRepository::Import] Loading Transport ros://ros-geometry_msgs.
-0.554 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Point
-0.554 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Point32
-0.554 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/PointStamped
-0.554 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Polygon
-0.554 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/PolygonStamped
-0.554 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Pose
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Pose2D
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/PoseArray
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/PoseStamped
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/PoseWithCovariance
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/PoseWithCovarianceStamped
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Quaternion
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/QuaternionStamped
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Transform
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/TransformStamped
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Twist
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/TwistStamped
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/TwistWithCovariance
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/TwistWithCovarianceStamped
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Vector3
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Vector3Stamped
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Wrench
-0.555 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/WrenchStamped
-0.555 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'rtt-ros-geometry_msgs-transport' from 'rtt-geometry_msgs-ros-transport'
-0.555 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/rtt_common_msgs/rtt_sensor_msgs/lib/orocos/xenomai ...
-0.555 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/rtt_common_msgs/rtt_sensor_msgs/lib/orocos/xenomai/types ...
-0.567 [ Info   ][TypekitRepository::Import] Loading Transport ros://ros-sensor_msgs.
-0.567 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'rtt-ros-sensor_msgs-transport' from 'rtt-sensor_msgs-ros-transport'
-0.641 [ Info   ][TypekitRepository::Import] Loading Typekit ros-sensor_msgs.
-0.641 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/Range
-0.641 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/NavSatStatus
-0.641 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/TimeReference
-0.641 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/PointCloud2
-0.641 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/ChannelFloat32
-0.642 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/PointField
-0.642 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/RelativeHumidity
-0.642 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/Joy
-0.642 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/MagneticField
-0.642 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/JoyFeedbackArray
-0.642 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/FluidPressure
-0.642 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/PointCloud
-0.642 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/NavSatFix
-0.642 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/Illuminance
-0.642 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/CompressedImage
-0.642 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/CameraInfo
-0.642 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/JointState
-0.643 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/JoyFeedback
-0.643 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/Image
-0.643 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/Temperature
-0.643 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/RegionOfInterest
-0.643 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/Imu
-0.643 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/MultiEchoLaserScan
-0.643 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/LaserEcho
-0.643 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/LaserScan
-0.643 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'ros-sensor_msgs' from 'rtt-sensor_msgs-typekit'
-0.643 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/kuka_robot_hardware/kuka_lwr_fri/lib/orocos/xenomai ...
-0.643 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/kuka_robot_hardware/kuka_lwr_fri/lib/orocos/xenomai/types ...
-0.664 [ Info   ][TypekitRepository::Import] Loading Typekit /orogen/kuka_lwr_fri.
-0.665 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/kuka_lwr_fri' from 'kuka_lwr_fri-typekit'
-0.665 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/motion_control/rtt_motion_control_msgs/lib/orocos/xenomai ...
-0.665 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/motion_control/rtt_motion_control_msgs/lib/orocos/xenomai/types ...
-0.677 [ Info   ][TypekitRepository::Import] Loading Typekit ros-motion_control_msgs.
-0.677 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'ros-motion_control_msgs' from 'rtt-motion_control_msgs-typekit'
-0.679 [ Info   ][TypekitRepository::Import] Loading Transport ros://ros-motion_control_msgs.
-0.679 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /motion_control_msgs/JointAccelerations
-0.679 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /motion_control_msgs/JointEfforts
-0.679 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /motion_control_msgs/JointPositions
-0.679 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /motion_control_msgs/JointVelocities
-0.679 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'rtt-ros-motion_control_msgs-transport' from 'rtt-motion_control_msgs-ros-transport'
-0.679 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/kuka_robot_hardware/lwr_fri/lib/orocos/xenomai ...
-0.718 [ Info   ][DeploymentComponent::import] Loaded component type 'lwr_fri::FRIServerRT'
-0.721 [ Info   ][DeploymentComponent::import] Loaded component type 'lwr_fri::FRIComponent'
-0.722 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/kuka_robot_hardware/lwr_fri/lib/orocos/xenomai/types ...
-0.726 [ Info   ][TypekitRepository::Import] Loading Transport ros://ros-lwr_fri.
-0.726 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'rtt-ros-lwr_fri-transport' from 'rtt-lwr_fri-ros-transport'
-0.726 [ Info   ][TypekitRepository::Import] Loading Typekit ros-lwr_fri.
-0.726 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/CartesianImpedance
-0.726 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/FriRobotJntData
-0.726 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/FriJointState
-0.726 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/FriJointImpedance
-0.726 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/FriJointCommand
-0.726 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/FriIntfStatistics
-0.727 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/FriRobotState
-0.727 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/FriJointTorques
-0.727 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/FriRobotData
-0.727 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'ros-lwr_fri' from 'rtt-lwr_fri-typekit'
-0.728 [ Info   ][TypekitRepository::Import] Loading Typekit lwr_fri_typekit.
-0.728 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'lwr_fri_typekit' from 'lwr_fri_typekit'
-0.729 [ Info   ][DeploymentComponent::import] Component package 'kuka_lwr_fri' already imported.
-0.737 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/rtt_common_msgs/rtt_trajectory_msgs/lib/orocos/xenomai ...
-0.737 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/rtt_common_msgs/rtt_trajectory_msgs/lib/orocos/xenomai/types ...
-0.744 [ Info   ][TypekitRepository::Import] Loading Typekit ros-trajectory_msgs.
-0.745 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'ros-trajectory_msgs' from 'rtt-trajectory_msgs-typekit'
-0.746 [ Info   ][TypekitRepository::Import] Loading Transport ros://ros-trajectory_msgs.
-0.746 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /trajectory_msgs/JointTrajectory
-0.746 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /trajectory_msgs/JointTrajectoryPoint
-0.746 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'rtt-ros-trajectory_msgs-transport' from 'rtt-trajectory_msgs-ros-transport'
-0.746 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/KUKACommander/lib/orocos/xenomai ...
-0.761 [ Info   ][DeploymentComponent::import] Loaded component type 'iros::KUKACommander'
-0.767 [ Info   ][DeploymentComponent::import] Loaded component type 'iros::KUKACommanderROS'
-0.776 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/pbd/KUKAInterface/lib/orocos/xenomai ...
-0.778 [ Info   ][DeploymentComponent::import] Loaded component type 'iros::orocos::pbd::MattiaControl'
-0.785 [ Info   ][DeploymentComponent::import] Loaded multi component library '/home/intelligentrobotics/ws/orocos/pbd/KUKAInterface/lib/orocos/xenomai/libKUKAInterface-xenomai.so'
-0.785 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/pbd/KUKAInterface/lib/orocos/xenomai/types ...
-0.793 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/FTSensor/lib/orocos/xenomai ...
-0.796 [ Info   ][DeploymentComponent::import] Loaded component type 'iros::FTSensor'
-0.796 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/FTSensor/lib/orocos/xenomai/types ...
-0.821 [ Info   ][TypekitRepository::Import] Loading Transport MQueue:///orogen/FTSensor.
-0.821 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /std/string
-0.821 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/FTSensor/MQueue' from 'FTSensor-transport-mqueue'
-0.822 [ Info   ][TypekitRepository::Import] Loading Transport CORBA:///orogen/FTSensor.
-0.822 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/FTSensor/CORBA' from 'FTSensor-transport-corba'
-0.827 [ Info   ][TypekitRepository::Import] Loading Typekit /orogen/FTSensor.
-0.827 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /FTSensorData
-0.827 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /FTSensorData
-0.827 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /std/string
-0.827 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /std/vector</double>
-0.827 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/FTSensor' from 'FTSensor-typekit'
-0.827 [ Info   ][TypekitRepository::Import] Loading Transport Typelib:///orogen/FTSensor.
-0.835 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /FTSensorData
-0.835 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /std/string
-0.835 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /std/vector</double>
-0.835 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/FTSensor/TYPELIB' from 'FTSensor-transport-typelib'
-0.835 [ Info   ][DeploymentComponent::import] Loading plugin libraries from directory /home/intelligentrobotics/ws/orocos/FTSensor/lib/orocos/xenomai/plugins ...
-0.836 [ Info   ][DeploymentComponent::import] Loaded RTT Service 'myservice' from 'FTSensor-service'
-0.836 [ Info   ][DeploymentComponent::import] Loaded RTT Plugin 'FTSensor-example-plugin' from 'FTSensor-plugin'
-0.845 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/lib/orocos/xenomai ...
-0.851 [ Info   ][DeploymentComponent::import] Loaded component type 'iros::ProactiveAssistance'
-0.852 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/lib/orocos/xenomai/types ...
-0.857 [ Info   ][TypekitRepository::Import] Loading Typekit /orogen/ProactiveAssistance.
-0.857 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /std/string
-0.857 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /std/vector</double>
-0.857 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/ProactiveAssistance' from 'ProactiveAssistance-typekit'
-0.858 [ Info   ][TypekitRepository::Import] Loading Transport Typelib:///orogen/ProactiveAssistance.
-0.866 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /ProactiveAssistanceData
-0.866 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/ProactiveAssistance/TYPELIB' from 'ProactiveAssistance-transport-typelib'
-0.882 [ Info   ][TypekitRepository::Import] Loading Transport MQueue:///orogen/ProactiveAssistance.
-0.882 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /ProactiveAssistanceData
-0.882 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /std/string
-0.882 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /std/vector</double>
-0.882 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/ProactiveAssistance/MQueue' from 'ProactiveAssistance-transport-mqueue'
-0.883 [ Info   ][TypekitRepository::Import] Loading Transport CORBA:///orogen/ProactiveAssistance.
-0.883 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /ProactiveAssistanceData
-0.883 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/ProactiveAssistance/CORBA' from 'ProactiveAssistance-transport-corba'
-0.883 [ Info   ][DeploymentComponent::import] Loading plugin libraries from directory /home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/lib/orocos/xenomai/plugins ...
-0.884 [ Info   ][DeploymentComponent::import] Loaded RTT Plugin 'ProactiveAssistance-example-plugin' from 'ProactiveAssistance-plugin'
-0.884 [ Info   ][DeploymentComponent::import] Loaded RTT Service 'myservice' from 'ProactiveAssistance-service'
-0.893 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/pbd/dmp/Execution/lib/orocos/xenomai ...
-0.908 [ Info   ][DeploymentComponent::import] Loaded component type 'iros::orocos::pbd::dmp::execution::Controller'
-0.909 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='FRIServer'
-0.910 [ Info   ][FRIServer] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
-0.912 [ Info   ][DeploymentComponent::loadComponent] Adding FRIServer as new peer:  OK.
-0.912 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='KUKACommander'
-0.912 [ Info   ][KUKACommander] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
-0.914 [ Info   ][KUKACommander] KUKACommander constructed !
-0.914 [ Info   ][DeploymentComponent::loadComponent] Adding KUKACommander as new peer:  OK.
-0.915 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='KUKACommanderROS'
-0.915 [ Info   ][KUKACommanderROS] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
-0.915 [ Info   ][DeploymentComponent::loadComponent] Adding KUKACommanderROS as new peer:  OK.
-0.916 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='ProactiveAssistance'
-0.916 [ Info   ][ProactiveAssistance] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
-0.917 [ Info   ][DeploymentComponent::loadComponent] Adding ProactiveAssistance as new peer:  OK.
-0.918 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='ExecutionController'
-0.918 [ Info   ][ExecutionController] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
-0.919 [ Info   ][DeploymentComponent::loadComponent] Adding ExecutionController as new peer:  OK.
-0.919 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='FTSensor'
-0.920 [ Info   ][FTSensor] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
-0.920 [ Info   ][FTSensor] FTSensor constructed!
-0.920 [ Info   ][DeploymentComponent::loadComponent] Adding FTSensor as new peer:  OK.
-0.922 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='KUKAInterface'
-0.922 [ Info   ][KUKAInterface] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
-0.923 [ Info   ][DeploymentComponent::loadComponent] Adding KUKAInterface as new peer:  OK.
-0.924 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_RT, priority=99, CPU affinity=4294967295, with name='FRIServer'
-0.924 [ Info   ][FRIServer1] Thread created with scheduler type 'ORO_SCHED_RT', priority 99, cpu affinity 0 and period 0.001 (PID= 0 ).
-0.925 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_RT, priority=99, CPU affinity=4294967295, with name='FTSensor'
-0.925 [ Info   ][FTSensor1] Thread created with scheduler type 'ORO_SCHED_RT', priority 99, cpu affinity 0 and period 0.001 (PID= 0 ).
-0.926 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_RT, priority=70, CPU affinity=4294967295, with name='ExecutionController'
-0.926 [ Info   ][ExecutionController1] Thread created with scheduler type 'ORO_SCHED_RT', priority 70, cpu affinity 0 and period 0.01 (PID= 0 ).
-0.926 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_RT, priority=70, CPU affinity=4294967295, with name='KUKACommander'
-0.927 [ Info   ][KUKACommander1] Thread created with scheduler type 'ORO_SCHED_RT', priority 70, cpu affinity 0 and period 0.01 (PID= 0 ).
-0.927 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_RT, priority=50, CPU affinity=4294967295, with name='KUKACommanderROS'
-0.927 [ Info   ][KUKACommanderROS1] Thread created with scheduler type 'ORO_SCHED_RT', priority 50, cpu affinity 0 and period 0.01 (PID= 0 ).
-0.928 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_RT, priority=70, CPU affinity=4294967295, with name='ProactiveAssistance'
-0.928 [ Info   ][ProactiveAssistance1] Thread created with scheduler type 'ORO_SCHED_RT', priority 70, cpu affinity 0 and period 0.001 (PID= 0 ).
-0.928 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_RT, priority=50, CPU affinity=4294967295, with name='KUKAInterface'
-0.928 [ Info   ][KUKAInterface1] Thread created with scheduler type 'ORO_SCHED_RT', priority 50, cpu affinity 0 and period 0.001 (PID= 0 ).
-0.931 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.fromKRL to  KUKACommander.fromKRL.
-0.931 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.toKRL to  KUKACommander.toKRL.
-0.931 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.FRIState to  KUKACommander.FRIState.
-0.932 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.RobotState to  KUKACommander.RobotState.
-0.932 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.desJntImpedance to  KUKACommander.desJntImpedance.
-0.933 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.desCartImpedance to  KUKACommander.desCartImpedance.
-0.933 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.msrJointState to  KUKACommander.msrJointState.
-0.934 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.msrCartPos to  KUKACommander.msrCartPos.
-0.934 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.msrExtCartWrench to  KUKACommander.msrExtCartWrench.
-0.934 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.FRIState to  ExecutionController.friState.
-0.935 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.counter to  ExecutionController.counter.
-0.935 [ Info   ][DeploymentComponent::connect] Connected Port KUKACommander.desiredJntPos to  FRIServer.desJntPos.
-0.936 [ Info   ][DeploymentComponent::connect] Connected Port KUKACommander.desiredJntVel to  FRIServer.desJntVel.
-0.936 [ Info   ][DeploymentComponent::connect] Connected Port KUKACommander.desiredCartPos to  FRIServer.desCartPos.
-0.937 [ Info   ][DeploymentComponent::connect] Connected Port KUKACommander.desCartForce to  FRIServer.desAddTcpWrench.
-0.937 [ Info   ][DeploymentComponent::connect] Connected Port KUKACommander.desJntForce to  FRIServer.desAddJntTrq.
-0.938 [ Info   ][DeploymentComponent::connect] Connected Port ExecutionController.desState to  KUKAInterface.desState.
-0.938 [ Info   ][DeploymentComponent::connect] Connected Port KUKAInterface.msrState to  ExecutionController.msrState.
-0.938 [ Info   ][DeploymentComponent::connect] Connected Port ExecutionController.desStartState to  KUKAInterface.start_state.
-0.942 [ Info   ][DeploymentComponent::connect] Connected Port KUKAInterface.desPosition to  FRIServer.desCartPos.
-0.942 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.msrCartPos to  KUKAInterface.msrPosition.
-0.943 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.counter to  FTSensor.Trigger.
-0.943 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.counter to  ProactiveAssistance.counter.
-0.943 [ Info   ][DeploymentComponent::connect] Connected Port FTSensor.ForcePort to  ProactiveAssistance.msrForce.
-0.944 [ Info   ][DeploymentComponent::connect] Connected Port FTSensor.TorquePort to  ProactiveAssistance.msrTorque.
-0.944 [ Info   ][DeploymentComponent::connect] Connected Port ProactiveAssistance.desCartPos to  FRIServer.desCartPos.
-0.945 [ ERROR  ][DeploymentComponent::connect] No such port: 'cmdCartPos' while looking for port 'ProactiveAssistance.cmdCartPos'
-0.945 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.msrCartPos to  ProactiveAssistance.msrCartPosition.
-0.945 [ ERROR  ][DeploymentComponent::connect] No such port: 'msrJointState' while looking for port 'ProactiveAssistance.msrJointState'
-0.946 [ Info   ][DeploymentComponent::connect] Connected Port ProactiveAssistance.desAddJntTrq to  FRIServer.desAddJntTrq.
-0.946 [ ERROR  ][DeploymentComponent::connect] No such port: 'cmdJntPos' while looking for port 'ProactiveAssistance.cmdJntPos'
-0.947 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.msrExtJointTorque to  ProactiveAssistance.msrExtJointTorque.
-0.947 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.timestamp to  ProactiveAssistance.timestamp.
-0.948 [ Info   ][DeploymentComponent::connect] Connected Port ProactiveAssistance.desKUKAWrench to  FRIServer.desAddTcpWrench.
-0.948 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.msrExtCartWrench to  ProactiveAssistance.msrKUKAWrench.
-0.949 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.FRIState to  KUKAInterface.friState.
-0.949 [ Info   ][DeploymentComponent::connect] Connected Port KUKAInterface.prepared to  ExecutionController.in_prepared.
-0.949 [ Info   ][DeploymentComponent::connect] Connected Port KUKAInterface.start_pos_reached to  ExecutionController.in_start_pos_reached.
-0.951 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='RosPublishActivity'
-0.951 [ Info   ][RosPublishActivity] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
-0.951 [ Info   ][ScriptingService] Created output stream for output port msrJointState
-0.952 [ Info   ][ScriptingService] Created output stream for output port msrCartPos
-0.954 [ Info   ][ScriptingService] Created output stream for output port ForcePort
-0.955 [ Info   ][ScriptingService] Created output stream for output port out_prepared
-0.956 [ Info   ][ScriptingService] Created output stream for output port out_finished
-0.957 [ Info   ][ScriptingService] Created output stream for output port out_start_pos_reached
-0.958 [ Info   ][ScriptingService] Created input stream for input port prepare
-0.959 [ Info   ][ScriptingService] Created input stream for input port start
-0.960 [ Info   ][ScriptingService] Created input stream for input port stop
-0.961 [ Info   ][ScriptingService] Created input stream for input port startPosition
-0.962 [ Info   ][ScriptingService] Created input stream for input port impedance
-0.963 [ Info   ][ScriptingService] Created input stream for input port assistanceStart
-0.964 [ Info   ][ScriptingService] Created output stream for output port assistanceStarted
-0.965 [ Info   ][ScriptingService] Created input stream for input port assistanceStop
-0.966 [ Info   ][ScriptingService] Created output stream for output port assistanceStopped
-0.967 [ Info   ][ScriptingService] Created output stream for output port msrExtCartWrench
-0.968 [ Info   ][FTSensor] FTSensor configured!
-0.968 [ Info   ][KUKACommander] KUKACommander configured !
-0.970 [ Info   ][KUKACommanderROS] Found complete interface of requested service 'Commander'
-0.971 [ Info   ][KUKAInterface] Found complete interface of requested service 'Commander'
-0.972 [ Info   ][ProactiveAssistance] Found complete interface of requested service 'Commander'
-0.973 [ Info   ][FTSensor] FTSensor started!
-0.990 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='TaskBrowser'
-0.990 [ Info   ][TaskBrowser] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
-0.990 [ Info   ][Logger] Entering Task Deployer
-116.447 [ Info   ][KUKACommander] Successfully set new control mode: 1
-118.217 [ Info   ][KUKACommander] Successfully set new control mode: 3
-127.717 [ Info   ][KUKAInterface] Proactive Assistance about to start!
-127.717 [ Info   ][KUKAInterface] Proactive Assistance started
-127.727 [ Info   ][ProactiveAssistance] Setting control mode and state
-133.217 [ Info   ][KUKACommander] Successfully set new control mode: 2
-133.237 [ Info   ][ProactiveAssistance] ************* Changed Impedance *************
-133.237 [ Info   ][ProactiveAssistance] Stiffness: linear: 
+0.032 [ Info   ][GlobalEngine] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
+0.033 [ Info   ][Logger] No site file was found. Importing 'ocl' by default.
+0.075 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/ocl ...
+0.089 [ Info   ][DeploymentComponent::import] Loaded multi component library '/home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/ocl/liborocos-ocl-reporting-netcdf-xenomai.so'
+0.089 [ Info   ][DeploymentComponent::import] Loaded component type 'OCL::NetcdfReporting'
+0.090 [ Info   ][DeploymentComponent::import] Loaded component type 'OCL::LuaComponent'
+0.092 [ Info   ][DeploymentComponent::import] Loaded component type 'OCL::HelloWorld'
+0.094 [ Info   ][DeploymentComponent::import] Loaded multi component library '/home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/ocl/liborocos-ocl-timer-xenomai.so'
+0.094 [ Info   ][DeploymentComponent::import] Loaded component type 'OCL::LuaTLSFComponent'
+0.098 [ Info   ][DeploymentComponent::import] Loaded component type 'OCL::logging::Log4cxxAppender'
+0.098 [ Info   ][DeploymentComponent::import] Loaded multi component library '/home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/ocl/liborocos-ocl-reporting-xenomai.so'
+0.099 [ Info   ][DeploymentComponent::import] Loaded multi component library '/home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/ocl/liborocos-ocl-common-xenomai.so'
+0.101 [ Info   ][DeploymentComponent::import] Loaded multi component library '/home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/ocl/liborocos-ocl-logging-xenomai.so'
+0.101 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/ocl/types ...
+0.104 [ Info   ][TypekitRepository::Import] Loading Typekit OCLTypekit.
+0.104 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'OCLTypekit' from 'ocl'
+0.104 [ Info   ][DeploymentComponent::import] Loading plugin libraries from directory /home/intelligentrobotics/ws/orocos/orocos_toolchain/install/lib/orocos/xenomai/ocl/plugins ...
+0.106 [ Info   ][DeploymentComponent::import] Loaded RTT Service 'os' from 'os'
+0.107 [ Info   ][DeploymentComponent::import] Loaded RTT Service 'LuaTLSF' from 'rttlua-tlsf-plugin'
+0.107 [ Info   ][DeploymentComponent::import] Loaded RTT Service 'print' from 'print'
+0.108 [ Info   ][DeploymentComponent::import] Loaded RTT Service 'Lua' from 'rttlua-plugin'
+0.108 [ Info   ][Logger] Loading Service or Plugin scripting in TaskContext Deployer
+0.110 [ Info   ][Logger] Found complete interface of requested service 'scripting'
+0.110 [ Info   ][Logger] Running Script deploy/ProactiveAssistance.ops ...
+0.319 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/rtt_ros_integration/rtt_rospack/lib/orocos/xenomai ...
+0.319 [ Info   ][DeploymentComponent::import] Loading plugin libraries from directory /home/intelligentrobotics/ws/orocos/rtt_ros_integration/rtt_rospack/lib/orocos/xenomai/plugins ...
+0.320 [ Info   ][DeploymentComponent::import] Loaded RTT Plugin 'rospack' from 'rtt_rospack'
+0.320 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/rtt_ros_integration/rtt_rosnode/lib/orocos/xenomai ...
+0.320 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/rtt_ros_integration/rtt_rosnode/lib/orocos/xenomai/types ...
+0.351 [ Info   ][TypekitRepository::Import] Loading Typekit ros-primitives.
+0.352 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'ros-primitives' from 'rtt-ros-primitives-typekit'
+0.352 [ Info   ][DeploymentComponent::import] Loading plugin libraries from directory /home/intelligentrobotics/ws/orocos/rtt_ros_integration/rtt_rosnode/lib/orocos/xenomai/plugins ...
+0.361 [ Info   ][DeploymentComponent::import] Initializing ROS node
+0.371 [ Info   ][DeploymentComponent::import] ROS node spinner started
+0.372 [ Info   ][DeploymentComponent::import] Loaded RTT Plugin 'ros_integration' from 'rtt_rosnode'
+0.373 [ Info   ][DeploymentComponent::import] Loaded RTT Service 'rosparam' from 'rtt_rosparam_service'
+0.382 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/rtt_ros_comm/rtt_std_msgs/lib/orocos/xenomai ...
+0.382 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/rtt_ros_comm/rtt_std_msgs/lib/orocos/xenomai/types ...
+0.394 [ Info   ][TypekitRepository::Import] Loading Transport ros://ros-std_msgs.
+0.395 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'rtt-ros-std_msgs-transport' from 'rtt-std_msgs-ros-transport'
+0.480 [ Info   ][TypekitRepository::Import] Loading Typekit ros-std_msgs.
+0.480 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/MultiArrayDimension
+0.481 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/UInt8MultiArray
+0.481 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Duration
+0.481 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/UInt16
+0.481 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/UInt16MultiArray
+0.481 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Bool
+0.481 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/String
+0.481 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Int64
+0.481 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/UInt32MultiArray
+0.481 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Float32
+0.481 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Float64
+0.481 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Int32MultiArray
+0.481 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Int16
+0.481 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Time
+0.481 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/MultiArrayLayout
+0.481 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/ColorRGBA
+0.481 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Byte
+0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Float32MultiArray
+0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/ByteMultiArray
+0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/UInt64MultiArray
+0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Int8MultiArray
+0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Int64MultiArray
+0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/UInt32
+0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Char
+0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Empty
+0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Int32
+0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/UInt8
+0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Float64MultiArray
+0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/UInt64
+0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Header
+0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Int16MultiArray
+0.482 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /std_msgs/Int8
+0.483 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'ros-std_msgs' from 'rtt-std_msgs-typekit'
+0.483 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/rtt_ros_comm/rtt_rosgraph_msgs/lib/orocos/xenomai ...
+0.483 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/rtt_ros_comm/rtt_rosgraph_msgs/lib/orocos/xenomai/types ...
+0.489 [ Info   ][TypekitRepository::Import] Loading Typekit ros-rosgraph_msgs.
+0.489 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'ros-rosgraph_msgs' from 'rtt-rosgraph_msgs-typekit'
+0.490 [ Info   ][TypekitRepository::Import] Loading Transport ros://ros-rosgraph_msgs.
+0.490 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /rosgraph_msgs/Clock
+0.490 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /rosgraph_msgs/Log
+0.490 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'rtt-ros-rosgraph_msgs-transport' from 'rtt-rosgraph_msgs-ros-transport'
+0.490 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/rtt_common_msgs/rtt_geometry_msgs/lib/orocos/xenomai ...
+0.490 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/rtt_common_msgs/rtt_geometry_msgs/lib/orocos/xenomai/types ...
+0.556 [ Info   ][TypekitRepository::Import] Loading Typekit ros-geometry_msgs.
+0.557 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'ros-geometry_msgs' from 'rtt-geometry_msgs-typekit'
+0.567 [ Info   ][TypekitRepository::Import] Loading Transport ros://ros-geometry_msgs.
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Point
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Point32
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/PointStamped
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Polygon
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/PolygonStamped
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Pose
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Pose2D
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/PoseArray
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/PoseStamped
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/PoseWithCovariance
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/PoseWithCovarianceStamped
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Quaternion
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/QuaternionStamped
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Transform
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/TransformStamped
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Twist
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/TwistStamped
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/TwistWithCovariance
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/TwistWithCovarianceStamped
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Vector3
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Vector3Stamped
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/Wrench
+0.567 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /geometry_msgs/WrenchStamped
+0.568 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'rtt-ros-geometry_msgs-transport' from 'rtt-geometry_msgs-ros-transport'
+0.568 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/rtt_common_msgs/rtt_sensor_msgs/lib/orocos/xenomai ...
+0.568 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/rtt_common_msgs/rtt_sensor_msgs/lib/orocos/xenomai/types ...
+0.578 [ Info   ][TypekitRepository::Import] Loading Transport ros://ros-sensor_msgs.
+0.578 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'rtt-ros-sensor_msgs-transport' from 'rtt-sensor_msgs-ros-transport'
+0.654 [ Info   ][TypekitRepository::Import] Loading Typekit ros-sensor_msgs.
+0.654 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/Range
+0.654 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/NavSatStatus
+0.654 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/TimeReference
+0.654 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/PointCloud2
+0.654 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/ChannelFloat32
+0.654 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/PointField
+0.654 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/RelativeHumidity
+0.654 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/Joy
+0.655 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/MagneticField
+0.655 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/JoyFeedbackArray
+0.655 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/FluidPressure
+0.655 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/PointCloud
+0.655 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/NavSatFix
+0.655 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/Illuminance
+0.655 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/CompressedImage
+0.655 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/CameraInfo
+0.655 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/JointState
+0.655 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/JoyFeedback
+0.655 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/Image
+0.656 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/Temperature
+0.656 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/RegionOfInterest
+0.656 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/Imu
+0.656 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/MultiEchoLaserScan
+0.656 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/LaserEcho
+0.656 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /sensor_msgs/LaserScan
+0.656 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'ros-sensor_msgs' from 'rtt-sensor_msgs-typekit'
+0.656 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/kuka_robot_hardware/kuka_lwr_fri/lib/orocos/xenomai ...
+0.656 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/kuka_robot_hardware/kuka_lwr_fri/lib/orocos/xenomai/types ...
+0.678 [ Info   ][TypekitRepository::Import] Loading Typekit /orogen/kuka_lwr_fri.
+0.678 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/kuka_lwr_fri' from 'kuka_lwr_fri-typekit'
+0.678 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/motion_control/rtt_motion_control_msgs/lib/orocos/xenomai ...
+0.678 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/motion_control/rtt_motion_control_msgs/lib/orocos/xenomai/types ...
+0.691 [ Info   ][TypekitRepository::Import] Loading Typekit ros-motion_control_msgs.
+0.691 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'ros-motion_control_msgs' from 'rtt-motion_control_msgs-typekit'
+0.693 [ Info   ][TypekitRepository::Import] Loading Transport ros://ros-motion_control_msgs.
+0.693 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /motion_control_msgs/JointAccelerations
+0.693 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /motion_control_msgs/JointEfforts
+0.693 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /motion_control_msgs/JointPositions
+0.693 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /motion_control_msgs/JointVelocities
+0.693 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'rtt-ros-motion_control_msgs-transport' from 'rtt-motion_control_msgs-ros-transport'
+0.693 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/kuka_robot_hardware/lwr_fri/lib/orocos/xenomai ...
+0.732 [ Info   ][DeploymentComponent::import] Loaded component type 'lwr_fri::FRIServerRT'
+0.736 [ Info   ][DeploymentComponent::import] Loaded component type 'lwr_fri::FRIComponent'
+0.736 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/kuka_robot_hardware/lwr_fri/lib/orocos/xenomai/types ...
+0.740 [ Info   ][TypekitRepository::Import] Loading Transport ros://ros-lwr_fri.
+0.740 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'rtt-ros-lwr_fri-transport' from 'rtt-lwr_fri-ros-transport'
+0.740 [ Info   ][TypekitRepository::Import] Loading Typekit ros-lwr_fri.
+0.740 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/CartesianImpedance
+0.741 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/FriRobotJntData
+0.741 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/FriJointState
+0.741 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/FriJointImpedance
+0.741 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/FriJointCommand
+0.741 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/FriIntfStatistics
+0.741 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/FriRobotState
+0.741 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/FriJointTorques
+0.741 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /lwr_fri/FriRobotData
+0.741 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'ros-lwr_fri' from 'rtt-lwr_fri-typekit'
+0.742 [ Info   ][TypekitRepository::Import] Loading Typekit lwr_fri_typekit.
+0.742 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'lwr_fri_typekit' from 'lwr_fri_typekit'
+0.743 [ Info   ][DeploymentComponent::import] Component package 'kuka_lwr_fri' already imported.
+0.752 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/rtt_common_msgs/rtt_trajectory_msgs/lib/orocos/xenomai ...
+0.752 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/rtt_common_msgs/rtt_trajectory_msgs/lib/orocos/xenomai/types ...
+0.759 [ Info   ][TypekitRepository::Import] Loading Typekit ros-trajectory_msgs.
+0.760 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'ros-trajectory_msgs' from 'rtt-trajectory_msgs-typekit'
+0.761 [ Info   ][TypekitRepository::Import] Loading Transport ros://ros-trajectory_msgs.
+0.761 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /trajectory_msgs/JointTrajectory
+0.761 [ Info   ][TypekitRepository::Import] Registered new 'ros' transport for /trajectory_msgs/JointTrajectoryPoint
+0.761 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport 'rtt-ros-trajectory_msgs-transport' from 'rtt-trajectory_msgs-ros-transport'
+0.761 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/KUKACommander/lib/orocos/xenomai ...
+0.776 [ Info   ][DeploymentComponent::import] Loaded component type 'iros::KUKACommander'
+0.782 [ Info   ][DeploymentComponent::import] Loaded component type 'iros::KUKACommanderROS'
+0.791 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/pbd/KUKAInterface/lib/orocos/xenomai ...
+0.793 [ Info   ][DeploymentComponent::import] Loaded component type 'iros::orocos::pbd::MattiaControl'
+0.800 [ Info   ][DeploymentComponent::import] Loaded multi component library '/home/intelligentrobotics/ws/orocos/pbd/KUKAInterface/lib/orocos/xenomai/libKUKAInterface-xenomai.so'
+0.800 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/pbd/KUKAInterface/lib/orocos/xenomai/types ...
+0.809 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/FTSensor/lib/orocos/xenomai ...
+0.811 [ Info   ][DeploymentComponent::import] Loaded component type 'iros::FTSensor'
+0.811 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/FTSensor/lib/orocos/xenomai/types ...
+0.836 [ Info   ][TypekitRepository::Import] Loading Transport MQueue:///orogen/FTSensor.
+0.836 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /std/string
+0.836 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/FTSensor/MQueue' from 'FTSensor-transport-mqueue'
+0.838 [ Info   ][TypekitRepository::Import] Loading Transport CORBA:///orogen/FTSensor.
+0.838 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/FTSensor/CORBA' from 'FTSensor-transport-corba'
+0.843 [ Info   ][TypekitRepository::Import] Loading Typekit /orogen/FTSensor.
+0.843 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /FTSensorData
+0.849 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /FTSensorData
+0.849 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /std/string
+0.849 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /std/vector</double>
+0.849 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/FTSensor' from 'FTSensor-typekit'
+0.850 [ Info   ][TypekitRepository::Import] Loading Transport Typelib:///orogen/FTSensor.
+0.858 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /FTSensorData
+0.858 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /std/string
+0.858 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /std/vector</double>
+0.858 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/FTSensor/TYPELIB' from 'FTSensor-transport-typelib'
+0.858 [ Info   ][DeploymentComponent::import] Loading plugin libraries from directory /home/intelligentrobotics/ws/orocos/FTSensor/lib/orocos/xenomai/plugins ...
+0.859 [ Info   ][DeploymentComponent::import] Loaded RTT Service 'myservice' from 'FTSensor-service'
+0.859 [ Info   ][DeploymentComponent::import] Loaded RTT Plugin 'FTSensor-example-plugin' from 'FTSensor-plugin'
+0.868 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/lib/orocos/xenomai ...
+0.875 [ Info   ][DeploymentComponent::import] Loaded component type 'iros::ProactiveAssistance'
+0.875 [ Info   ][DeploymentComponent::import] Loading typekit libraries from directory /home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/lib/orocos/xenomai/types ...
+0.880 [ Info   ][TypekitRepository::Import] Loading Typekit /orogen/ProactiveAssistance.
+0.881 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /std/string
+0.881 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /std/vector</double>
+0.881 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/ProactiveAssistance' from 'ProactiveAssistance-typekit'
+0.882 [ Info   ][TypekitRepository::Import] Loading Transport Typelib:///orogen/ProactiveAssistance.
+0.890 [ Info   ][TypekitRepository::Import] Registered new 'Typelib' transport for /ProactiveAssistanceData
+0.890 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/ProactiveAssistance/TYPELIB' from 'ProactiveAssistance-transport-typelib'
+0.907 [ Info   ][TypekitRepository::Import] Loading Transport MQueue:///orogen/ProactiveAssistance.
+0.907 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /ProactiveAssistanceData
+0.907 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /std/string
+0.907 [ Info   ][TypekitRepository::Import] Registered new 'MQueue' transport for /std/vector</double>
+0.907 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/ProactiveAssistance/MQueue' from 'ProactiveAssistance-transport-mqueue'
+0.909 [ Info   ][TypekitRepository::Import] Loading Transport CORBA:///orogen/ProactiveAssistance.
+0.909 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for /ProactiveAssistanceData
+0.909 [ Info   ][DeploymentComponent::import] Loaded RTT TypeKit/Transport '/orogen/ProactiveAssistance/CORBA' from 'ProactiveAssistance-transport-corba'
+0.909 [ Info   ][DeploymentComponent::import] Loading plugin libraries from directory /home/intelligentrobotics/ws/orocos/Applications/ProactiveAssistance/lib/orocos/xenomai/plugins ...
+0.909 [ Info   ][DeploymentComponent::import] Loaded RTT Plugin 'ProactiveAssistance-example-plugin' from 'ProactiveAssistance-plugin'
+0.910 [ Info   ][DeploymentComponent::import] Loaded RTT Service 'myservice' from 'ProactiveAssistance-service'
+0.919 [ Info   ][DeploymentComponent::import] Importing directory /home/intelligentrobotics/ws/orocos/pbd/dmp/Execution/lib/orocos/xenomai ...
+0.934 [ Info   ][DeploymentComponent::import] Loaded component type 'iros::orocos::pbd::dmp::execution::Controller'
+0.935 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='FRIServer'
+0.935 [ Info   ][FRIServer] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
+0.937 [ Info   ][DeploymentComponent::loadComponent] Adding FRIServer as new peer:  OK.
+0.938 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='KUKACommander'
+0.938 [ Info   ][KUKACommander] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
+0.940 [ Info   ][KUKACommander] KUKACommander constructed !
+0.940 [ Info   ][DeploymentComponent::loadComponent] Adding KUKACommander as new peer:  OK.
+0.941 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='KUKACommanderROS'
+0.941 [ Info   ][KUKACommanderROS] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
+0.941 [ Info   ][DeploymentComponent::loadComponent] Adding KUKACommanderROS as new peer:  OK.
+0.941 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='ProactiveAssistance'
+0.942 [ Info   ][ProactiveAssistance] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
+0.943 [ Info   ][DeploymentComponent::loadComponent] Adding ProactiveAssistance as new peer:  OK.
+0.943 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='ExecutionController'
+0.944 [ Info   ][ExecutionController] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
+0.945 [ Info   ][DeploymentComponent::loadComponent] Adding ExecutionController as new peer:  OK.
+0.945 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='FTSensor'
+0.946 [ Info   ][FTSensor] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
+0.946 [ Info   ][FTSensor] FTSensor constructed!
+0.946 [ Info   ][DeploymentComponent::loadComponent] Adding FTSensor as new peer:  OK.
+0.948 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='KUKAInterface'
+0.949 [ Info   ][KUKAInterface] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
+0.950 [ Info   ][DeploymentComponent::loadComponent] Adding KUKAInterface as new peer:  OK.
+0.950 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_RT, priority=99, CPU affinity=4294967295, with name='FRIServer'
+0.950 [ Info   ][FRIServer1] Thread created with scheduler type 'ORO_SCHED_RT', priority 99, cpu affinity 0 and period 0.001 (PID= 0 ).
+0.951 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_RT, priority=99, CPU affinity=4294967295, with name='FTSensor'
+0.951 [ Info   ][FTSensor1] Thread created with scheduler type 'ORO_SCHED_RT', priority 99, cpu affinity 0 and period 0.001 (PID= 0 ).
+0.952 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_RT, priority=70, CPU affinity=4294967295, with name='ExecutionController'
+0.952 [ Info   ][ExecutionController1] Thread created with scheduler type 'ORO_SCHED_RT', priority 70, cpu affinity 0 and period 0.01 (PID= 0 ).
+0.953 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_RT, priority=70, CPU affinity=4294967295, with name='KUKACommander'
+0.953 [ Info   ][KUKACommander1] Thread created with scheduler type 'ORO_SCHED_RT', priority 70, cpu affinity 0 and period 0.01 (PID= 0 ).
+0.953 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_RT, priority=50, CPU affinity=4294967295, with name='KUKACommanderROS'
+0.953 [ Info   ][KUKACommanderROS1] Thread created with scheduler type 'ORO_SCHED_RT', priority 50, cpu affinity 0 and period 0.01 (PID= 0 ).
+0.954 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_RT, priority=70, CPU affinity=4294967295, with name='ProactiveAssistance'
+0.954 [ Info   ][ProactiveAssistance1] Thread created with scheduler type 'ORO_SCHED_RT', priority 70, cpu affinity 0 and period 0.001 (PID= 0 ).
+0.954 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_RT, priority=50, CPU affinity=4294967295, with name='KUKAInterface'
+0.955 [ Info   ][KUKAInterface1] Thread created with scheduler type 'ORO_SCHED_RT', priority 50, cpu affinity 0 and period 0.001 (PID= 0 ).
+0.957 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.fromKRL to  KUKACommander.fromKRL.
+0.957 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.toKRL to  KUKACommander.toKRL.
+0.958 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.FRIState to  KUKACommander.FRIState.
+0.958 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.RobotState to  KUKACommander.RobotState.
+0.959 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.desJntImpedance to  KUKACommander.desJntImpedance.
+0.959 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.desCartImpedance to  KUKACommander.desCartImpedance.
+0.959 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.msrJointState to  KUKACommander.msrJointState.
+0.960 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.msrCartPos to  KUKACommander.msrCartPos.
+0.960 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.msrExtCartWrench to  KUKACommander.msrExtCartWrench.
+0.961 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.FRIState to  ExecutionController.friState.
+0.961 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.counter to  ExecutionController.counter.
+0.962 [ Info   ][DeploymentComponent::connect] Connected Port KUKACommander.desiredJntPos to  FRIServer.desJntPos.
+0.962 [ Info   ][DeploymentComponent::connect] Connected Port KUKACommander.desiredJntVel to  FRIServer.desJntVel.
+0.963 [ Info   ][DeploymentComponent::connect] Connected Port KUKACommander.desiredCartPos to  FRIServer.desCartPos.
+0.963 [ Info   ][DeploymentComponent::connect] Connected Port KUKACommander.desCartForce to  FRIServer.desAddTcpWrench.
+0.964 [ Info   ][DeploymentComponent::connect] Connected Port KUKACommander.desJntForce to  FRIServer.desAddJntTrq.
+0.964 [ Info   ][DeploymentComponent::connect] Connected Port ExecutionController.desState to  KUKAInterface.desState.
+0.965 [ Info   ][DeploymentComponent::connect] Connected Port KUKAInterface.msrState to  ExecutionController.msrState.
+0.965 [ Info   ][DeploymentComponent::connect] Connected Port ExecutionController.desStartState to  KUKAInterface.start_state.
+0.969 [ Info   ][DeploymentComponent::connect] Connected Port KUKAInterface.desPosition to  FRIServer.desCartPos.
+0.969 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.msrCartPos to  KUKAInterface.msrPosition.
+0.969 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.counter to  FTSensor.Trigger.
+0.970 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.counter to  ProactiveAssistance.counter.
+0.970 [ Info   ][DeploymentComponent::connect] Connected Port FTSensor.ForcePort to  ProactiveAssistance.msrForce.
+0.971 [ Info   ][DeploymentComponent::connect] Connected Port FTSensor.TorquePort to  ProactiveAssistance.msrTorque.
+0.971 [ Info   ][DeploymentComponent::connect] Connected Port ProactiveAssistance.desCartPos to  FRIServer.desCartPos.
+0.971 [ ERROR  ][DeploymentComponent::connect] No such port: 'cmdCartPos' while looking for port 'ProactiveAssistance.cmdCartPos'
+0.972 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.msrCartPos to  ProactiveAssistance.msrCartPosition.
+0.972 [ ERROR  ][DeploymentComponent::connect] No such port: 'msrJointState' while looking for port 'ProactiveAssistance.msrJointState'
+0.973 [ Info   ][DeploymentComponent::connect] Connected Port ProactiveAssistance.desAddJntTrq to  FRIServer.desAddJntTrq.
+0.973 [ ERROR  ][DeploymentComponent::connect] No such port: 'cmdJntPos' while looking for port 'ProactiveAssistance.cmdJntPos'
+0.973 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.msrExtJointTorque to  ProactiveAssistance.msrExtJointTorque.
+0.974 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.timestamp to  ProactiveAssistance.timestamp.
+0.974 [ Info   ][DeploymentComponent::connect] Connected Port ProactiveAssistance.desKUKAWrench to  FRIServer.desAddTcpWrench.
+0.975 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.msrExtCartWrench to  ProactiveAssistance.msrKUKAWrench.
+0.975 [ Info   ][DeploymentComponent::connect] Connected Port FRIServer.FRIState to  KUKAInterface.friState.
+0.976 [ Info   ][DeploymentComponent::connect] Connected Port KUKAInterface.prepared to  ExecutionController.in_prepared.
+0.976 [ Info   ][DeploymentComponent::connect] Connected Port KUKAInterface.start_pos_reached to  ExecutionController.in_start_pos_reached.
+0.978 [ Info   ][ScriptingService] Created input stream for input port desCartImpedance
+0.979 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='RosPublishActivity'
+0.979 [ Info   ][RosPublishActivity] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
+0.979 [ Info   ][ScriptingService] Created output stream for output port msrJointState
+0.980 [ Info   ][ScriptingService] Created output stream for output port msrCartPos
+0.981 [ Info   ][ScriptingService] Created output stream for output port ForcePort
+0.982 [ Info   ][ScriptingService] Created output stream for output port desPosition
+0.983 [ Info   ][ScriptingService] Created output stream for output port out_prepared
+0.984 [ Info   ][ScriptingService] Created output stream for output port out_finished
+0.985 [ Info   ][ScriptingService] Created output stream for output port out_start_pos_reached
+0.986 [ Info   ][ScriptingService] Created input stream for input port prepare
+0.988 [ Info   ][ScriptingService] Created input stream for input port start
+0.989 [ Info   ][ScriptingService] Created input stream for input port stop
+0.990 [ Info   ][ScriptingService] Created input stream for input port startPosition
+0.991 [ Info   ][ScriptingService] Created input stream for input port haltExecution
+0.993 [ Info   ][ScriptingService] Created input stream for input port impedance
+0.994 [ Info   ][ScriptingService] Created input stream for input port assistanceStart
+0.996 [ Info   ][ScriptingService] Created output stream for output port assistanceStarted
+0.997 [ Info   ][ScriptingService] Created input stream for input port assistanceStop
+0.998 [ Info   ][ScriptingService] Created output stream for output port assistanceStopped
+0.999 [ Info   ][ScriptingService] Created output stream for output port msrExtCartWrench
+0.999 [ Info   ][FTSensor] FTSensor configured!
+1.000 [ Info   ][KUKACommander] KUKACommander configured !
+1.001 [ Info   ][KUKACommanderROS] Found complete interface of requested service 'Commander'
+1.002 [ Info   ][KUKAInterface] Found complete interface of requested service 'Commander'
+1.003 [ Info   ][ProactiveAssistance] Found complete interface of requested service 'Commander'
+1.004 [ Info   ][FTSensor] FTSensor started!
+1.016 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='TaskBrowser'
+1.016 [ Info   ][TaskBrowser] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 1, cpu affinity 0 and period 0 (PID= 0 ).
+1.017 [ Info   ][Logger] Entering Task Deployer
+9.053 [ Info   ][KUKACommander] Successfully set new control mode: 1
+10.953 [ Info   ][KUKACommander] Successfully set new control mode: 2
+22.843 [ Info   ][Logger] Proactive Assistance about to start!
+22.843 [ Info   ][Logger] Proactive Assistance started
+22.873 [ Info   ][ProactiveAssistance] ************* Changed Impedance *************
+22.873 [ Info   ][ProactiveAssistance] Stiffness: linear: 
   x: 0
   y: 0
   z: 0
 angular: 
-  x: 200
-  y: 200
-  z: 200
+  x: 300
+  y: 300
+  z: 300
 
-133.237 [ Info   ][ProactiveAssistance] filtered_f_z: 0
-134.067 [ Info   ][ProactiveAssistance] ************* Changed Impedance *************
-134.067 [ Info   ][ProactiveAssistance] Stiffness: linear: 
+22.873 [ Info   ][ProactiveAssistance] filtered_f_z: 0
+24.853 [ Info   ][ProactiveAssistance] filtered_f_z: 0.0445717
+26.603 [ Info   ][ProactiveAssistance] ************* Changed Impedance *************
+26.603 [ Info   ][ProactiveAssistance] Stiffness: linear: 
   x: 0
   y: 0
+  z: 4000
+angular: 
+  x: 300
+  y: 300
+  z: 300
+
+26.603 [ Info   ][ProactiveAssistance] filtered_f_z: -1.53545
+26.863 [ Info   ][ProactiveAssistance] filtered_f_z: -3.09417
+26.863 [ Info   ][ProactiveAssistance] In Contact!
+28.863 [ Info   ][ProactiveAssistance] filtered_f_z: -3.54013
+28.863 [ Info   ][ProactiveAssistance] In Contact!
+30.863 [ Info   ][ProactiveAssistance] filtered_f_z: -3.07919
+30.863 [ Info   ][ProactiveAssistance] In Contact!
+32.863 [ Info   ][ProactiveAssistance] filtered_f_z: -4.79878
+32.863 [ Info   ][ProactiveAssistance] In Contact!
+34.863 [ Info   ][ProactiveAssistance] filtered_f_z: -4.96617
+34.863 [ Info   ][ProactiveAssistance] In Contact!
+36.863 [ Info   ][ProactiveAssistance] filtered_f_z: -7.20632
+36.863 [ Info   ][ProactiveAssistance] In Contact!
+38.863 [ Info   ][ProactiveAssistance] filtered_f_z: -7.798
+38.863 [ Info   ][ProactiveAssistance] In Contact!
+40.863 [ Info   ][ProactiveAssistance] filtered_f_z: -4.49495
+40.863 [ Info   ][ProactiveAssistance] In Contact!
+42.863 [ Info   ][ProactiveAssistance] filtered_f_z: -5.51333
+42.863 [ Info   ][ProactiveAssistance] In Contact!
+44.863 [ Info   ][ProactiveAssistance] filtered_f_z: -5.77156
+44.863 [ Info   ][ProactiveAssistance] In Contact!
+46.733 [ Info   ][ProactiveAssistance] ************* Changed Impedance *************
+46.733 [ Info   ][ProactiveAssistance] Stiffness: linear: 
+  x: 0
+  y: 0
+  z: 0
+angular: 
+  x: 300
+  y: 300
+  z: 300
+
+46.733 [ Info   ][ProactiveAssistance] filtered_f_z: -0.195834
+46.873 [ Info   ][ProactiveAssistance] filtered_f_z: -0.0117062
+48.873 [ Info   ][ProactiveAssistance] filtered_f_z: -0.0813295
+50.873 [ Info   ][ProactiveAssistance] filtered_f_z: -0.134473
+52.473 [ Info   ][Logger] Proactive Assistance about to stop!
+52.473 [ Info   ][Logger] Proactive Assistance stopped
+53.182 [ Info   ][ExecutionController] Reading ExecutorPreperties
+53.182 [ Info   ][ExecutionController] Filename: /home/intelligentrobotics/ws/pbd/Applications/params/ExecutorParameters.txt
+53.190 [ Info   ][ExecutionController] Preparation finished
+53.282 [ Info   ][ExecutionController] Start pos = -0.173852 -0.486177 0.0574961 0.98951 -0.131084 -0.0573391 0.02 Moving to start position, vec len = 7
+53.283 [ Info   ][KUKAInterface] Received start state, vec len = 7
+53.283 [ Info   ][KUKAInterface] === Cartesian PTP motion ===
+53.283 [ Info   ][KUKAInterface] Position:    X:-173.852 Y:-486.177 Z:57.4961
+53.283 [ Info   ][KUKAInterface] Orientation: A:-15.2635 B:6.2134 C:176.851
+55.763 [ Info   ][KUKACommander] Successfully set new control mode: 1
+57.082 [ Info   ][ExecutionController] Start position reached
+59.153 [ Info   ][KUKACommander] Successfully set new control mode: 2
+62.269 [ Info   ][Logger] Proactive Assistance about to start!
+62.269 [ Info   ][Logger] Proactive Assistance started
+62.272 [ Info   ][ExecutionController] Calling for preparation...
+62.283 [ Info   ][ExecutionController] Preparation finished
+62.283 [ Info   ][ExecutionController] Executor started
+62.283 [ Warning][ExecutionController] No state measurements have been received yet
+62.293 [ Info   ][ProactiveAssistance] ************* Changed Impedance *************
+62.293 [ Info   ][ProactiveAssistance] Stiffness: linear: 
+  x: 200
+  y: 200
   z: 2000
 angular: 
   x: 300
   y: 300
   z: 300
 
-134.067 [ Info   ][ProactiveAssistance] filtered_f_z: -0.543946
-134.087 [ Info   ][ProactiveAssistance] filtered_f_z: -1.14551
-134.087 [ Info   ][ProactiveAssistance] In Contact!
-136.087 [ Info   ][ProactiveAssistance] filtered_f_z: -2.76259
-136.087 [ Info   ][ProactiveAssistance] In Contact!
-138.087 [ Info   ][ProactiveAssistance] filtered_f_z: -3.26685
-138.087 [ Info   ][ProactiveAssistance] In Contact!
-140.087 [ Info   ][ProactiveAssistance] filtered_f_z: -3.76834
-140.087 [ Info   ][ProactiveAssistance] In Contact!
-142.087 [ Info   ][ProactiveAssistance] filtered_f_z: -1.46116
-142.087 [ Info   ][ProactiveAssistance] In Contact!
-144.087 [ Info   ][ProactiveAssistance] filtered_f_z: -0.219253
-144.087 [ Info   ][ProactiveAssistance] In Contact!
-144.177 [ Info   ][ProactiveAssistance] ************* Changed Impedance *************
-144.177 [ Info   ][ProactiveAssistance] Stiffness: linear: 
-  x: 0
-  y: 0
-  z: 0
-angular: 
+62.293 [ Info   ][ProactiveAssistance] filtered_f_z: -0.111681
+62.673 [ Info   ][ProactiveAssistance] filtered_f_z: 0.148879
+64.673 [ Info   ][ProactiveAssistance] filtered_f_z: 0.156211
+66.143 [ Info   ][ProactiveAssistance] ************* Changed Impedance *************
+66.143 [ Info   ][ProactiveAssistance] Stiffness: linear: 
   x: 200
   y: 200
-  z: 200
+  z: 4000
+angular: 
+  x: 300
+  y: 300
+  z: 300
 
-144.177 [ Info   ][ProactiveAssistance] filtered_f_z: -0.196211
-146.097 [ Info   ][ProactiveAssistance] filtered_f_z: -0.0427952
-146.967 [ Info   ][ProactiveAssistance] ************* Changed Impedance *************
-146.967 [ Info   ][ProactiveAssistance] Stiffness: linear: 
-  x: 0
-  y: 0
+66.143 [ Info   ][ProactiveAssistance] filtered_f_z: -1.01007
+66.683 [ Info   ][ProactiveAssistance] filtered_f_z: -2.9696
+66.683 [ Info   ][ProactiveAssistance] In Contact!
+68.683 [ Info   ][ProactiveAssistance] filtered_f_z: -3.79062
+68.683 [ Info   ][ProactiveAssistance] In Contact!
+70.683 [ Info   ][ProactiveAssistance] filtered_f_z: -5.1289
+70.683 [ Info   ][ProactiveAssistance] In Contact!
+72.683 [ Info   ][ProactiveAssistance] filtered_f_z: -3.72651
+72.683 [ Info   ][ProactiveAssistance] In Contact!
+74.683 [ Info   ][ProactiveAssistance] filtered_f_z: -5.15936
+74.683 [ Info   ][ProactiveAssistance] In Contact!
+76.683 [ Info   ][ProactiveAssistance] filtered_f_z: -5.32737
+76.683 [ Info   ][ProactiveAssistance] In Contact!
+78.683 [ Info   ][ProactiveAssistance] filtered_f_z: -2.13517
+78.683 [ Info   ][ProactiveAssistance] In Contact!
+80.683 [ Info   ][ProactiveAssistance] filtered_f_z: -4.95296
+80.683 [ Info   ][ProactiveAssistance] In Contact!
+82.683 [ Info   ][ProactiveAssistance] filtered_f_z: -5.28493
+82.683 [ Info   ][ProactiveAssistance] In Contact!
+84.683 [ Info   ][ProactiveAssistance] filtered_f_z: -6.08058
+84.683 [ Info   ][ProactiveAssistance] In Contact!
+86.683 [ Info   ][ProactiveAssistance] filtered_f_z: -7.02649
+86.683 [ Info   ][ProactiveAssistance] In Contact!
+88.333 [ Info   ][ProactiveAssistance] ************* Changed Impedance *************
+88.333 [ Info   ][ProactiveAssistance] Stiffness: linear: 
+  x: 200
+  y: 200
   z: 2000
 angular: 
   x: 300
   y: 300
   z: 300
 
-146.967 [ Info   ][ProactiveAssistance] filtered_f_z: -0.778077
-148.107 [ Info   ][ProactiveAssistance] filtered_f_z: -1.33373
-148.107 [ Info   ][ProactiveAssistance] In Contact!
-148.757 [ Info   ][ProactiveAssistance] ************* Changed Impedance *************
-148.757 [ Info   ][ProactiveAssistance] Stiffness: linear: 
-  x: 0
-  y: 0
-  z: 0
+88.333 [ Info   ][ProactiveAssistance] filtered_f_z: -0.196537
+88.693 [ Info   ][ProactiveAssistance] filtered_f_z: 0.120402
+90.693 [ Info   ][ProactiveAssistance] filtered_f_z: 0.117268
+91.442 [ Info   ][ExecutionController] Execution stopped
+92.693 [ Info   ][ProactiveAssistance] filtered_f_z: 0.0617533
+94.693 [ Info   ][ProactiveAssistance] filtered_f_z: 0.049223
+96.693 [ Info   ][ProactiveAssistance] filtered_f_z: 0.0528053
+98.693 [ Info   ][ProactiveAssistance] filtered_f_z: 0.039109
+99.893 [ Info   ][Logger] Proactive Assistance about to stop!
+99.893 [ Info   ][Logger] Proactive Assistance stopped
+101.342 [ Info   ][ExecutionController] Reading ExecutorPreperties
+101.342 [ Info   ][ExecutionController] Filename: /home/intelligentrobotics/ws/pbd/Applications/params/ExecutorParameters.txt
+101.349 [ Info   ][ExecutionController] Preparation finished
+101.442 [ Info   ][ExecutionController] Start pos = -0.173563 -0.486533 0.0576402 0.989482 -0.131172 -0.057415 0.020547 Moving to start position, vec len = 7
+101.443 [ Info   ][KUKAInterface] Received start state, vec len = 7
+101.443 [ Info   ][KUKAInterface] === Cartesian PTP motion ===
+101.443 [ Info   ][KUKAInterface] Position:    X:-173.563 Y:-486.533 Z:57.6402
+101.443 [ Info   ][KUKAInterface] Orientation: A:-15.2774 B:6.2134 C:176.787
+104.543 [ Info   ][KUKACommander] Successfully set new control mode: 1
+105.902 [ Info   ][ExecutionController] Start position reached
+107.953 [ Info   ][KUKACommander] Successfully set new control mode: 2
+110.070 [ Info   ][Logger] Proactive Assistance about to start!
+110.070 [ Info   ][Logger] Proactive Assistance started
+110.082 [ Info   ][ExecutionController] Calling for preparation...
+110.093 [ Info   ][ExecutionController] Preparation finished
+110.093 [ Info   ][ExecutionController] Executor started
+110.863 [ Info   ][ProactiveAssistance] filtered_f_z: 0.154371
+112.863 [ Info   ][ProactiveAssistance] filtered_f_z: 0.141375
+113.373 [ Info   ][ProactiveAssistance] ************* Changed Impedance *************
+113.373 [ Info   ][ProactiveAssistance] Stiffness: linear: 
+  x: 400
+  y: 400
+  z: 4000
 angular: 
-  x: 200
-  y: 200
-  z: 200
+  x: 300
+  y: 300
+  z: 300
 
-148.757 [ Info   ][ProactiveAssistance] filtered_f_z: -0.193303
-150.117 [ Info   ][ProactiveAssistance] filtered_f_z: -0.150882
-152.117 [ Info   ][ProactiveAssistance] filtered_f_z: -0.264819
-153.207 [ Info   ][ProactiveAssistance] ************* Changed Impedance *************
-153.207 [ Info   ][ProactiveAssistance] Stiffness: linear: 
-  x: 0
-  y: 0
+113.373 [ Info   ][ProactiveAssistance] filtered_f_z: -1.1685
+114.873 [ Info   ][ProactiveAssistance] filtered_f_z: -7.31206
+114.873 [ Info   ][ProactiveAssistance] In Contact!
+116.873 [ Info   ][ProactiveAssistance] filtered_f_z: -9.32555
+116.873 [ Info   ][ProactiveAssistance] In Contact!
+118.873 [ Info   ][ProactiveAssistance] filtered_f_z: -6.92287
+118.873 [ Info   ][ProactiveAssistance] In Contact!
+120.873 [ Info   ][ProactiveAssistance] filtered_f_z: -7.73091
+120.873 [ Info   ][ProactiveAssistance] In Contact!
+122.873 [ Info   ][ProactiveAssistance] filtered_f_z: -6.95788
+122.873 [ Info   ][ProactiveAssistance] In Contact!
+124.873 [ Info   ][ProactiveAssistance] filtered_f_z: -6.11166
+124.873 [ Info   ][ProactiveAssistance] In Contact!
+126.873 [ Info   ][ProactiveAssistance] filtered_f_z: -6.59635
+126.873 [ Info   ][ProactiveAssistance] In Contact!
+128.873 [ Info   ][ProactiveAssistance] filtered_f_z: -6.25162
+128.873 [ Info   ][ProactiveAssistance] In Contact!
+130.873 [ Info   ][ProactiveAssistance] filtered_f_z: -6.8702
+130.873 [ Info   ][ProactiveAssistance] In Contact!
+132.873 [ Info   ][ProactiveAssistance] filtered_f_z: -6.88214
+132.873 [ Info   ][ProactiveAssistance] In Contact!
+134.873 [ Info   ][ProactiveAssistance] filtered_f_z: -7.72763
+134.873 [ Info   ][ProactiveAssistance] In Contact!
+136.873 [ Info   ][ProactiveAssistance] filtered_f_z: -3.46657
+136.873 [ Info   ][ProactiveAssistance] In Contact!
+137.743 [ Info   ][ProactiveAssistance] ************* Changed Impedance *************
+137.743 [ Info   ][ProactiveAssistance] Stiffness: linear: 
+  x: 400
+  y: 400
   z: 2000
 angular: 
   x: 300
   y: 300
   z: 300
 
-153.207 [ Info   ][ProactiveAssistance] filtered_f_z: -0.794347
-154.127 [ Info   ][ProactiveAssistance] filtered_f_z: -1.3723
-154.127 [ Info   ][ProactiveAssistance] In Contact!
-154.657 [ Info   ][ProactiveAssistance] ************* Changed Impedance *************
-154.657 [ Info   ][ProactiveAssistance] Stiffness: linear: 
-  x: 0
-  y: 0
-  z: 0
-angular: 
-  x: 200
-  y: 200
-  z: 200
-
-154.657 [ Info   ][ProactiveAssistance] filtered_f_z: -0.185245
-156.137 [ Info   ][ProactiveAssistance] filtered_f_z: -0.0373178
-158.137 [ Info   ][ProactiveAssistance] filtered_f_z: -0.0568318
-159.237 [ Info   ][KUKAInterface] Proactive Assistance about to stop!
-159.237 [ Info   ][KUKAInterface] Proactive Assistance stopped
-159.746 [ Info   ][ExecutionController] Reading ExecutorPreperties
-159.746 [ Info   ][ExecutionController] Filename: /home/intelligentrobotics/ws/pbd/Applications/params/ExecutorParameters.txt
-159.750 [ Info   ][ExecutionController] Preparation finished
-159.816 [ Info   ][ExecutionController] Start pos = -0.000498166 -0.593694 0.052626 -0.997893 0.00600988 0.000198712 0.0646004 Moving to start position, vec len = 7
-159.817 [ Info   ][KUKAInterface] Received start state, vec len = 7
-159.817 [ Info   ][KUKAInterface] boolData: 0 Result: 0
-159.817 [ Info   ][KUKAInterface] === Cartesian PTP motion ===
-159.817 [ Info   ][KUKAInterface] Position:    X:-0.498166 Y:-593.694 Z:52.626
-159.817 [ Info   ][KUKAInterface] Orientation: A:-0.685776 B:0.0672119 C:-172.592
-162.657 [ Info   ][KUKACommander] Successfully set new control mode: 1
-163.976 [ Info   ][ExecutionController] Start position reached
-163.978 [ Info   ][KUKAInterface] Proactive Assistance about to start!
-163.978 [ Info   ][KUKAInterface] Proactive Assistance started
-163.986 [ Info   ][ExecutionController] Calling for preparation...
-166.017 [ Info   ][KUKACommander] Successfully set new control mode: 2
-166.036 [ Info   ][ExecutionController] Preparation finished
-166.036 [ Info   ][ExecutionController] Executor started
-166.037 [ Info   ][KUKAInterface] ************* Changed Impedance *************Stiffness: linear: 
-  x: 40
-  y: 40
-  z: 40
-angular: 
-  x: 200
-  y: 200
-  z: 200
-
-166.037 [ Info   ][KUKAInterface] filtered_f_z: -0.0370904
-166.037 [ Info   ][ProactiveAssistance] Msr pos: x: -0.000552265
-y: -0.593749
-z: 0.052615
-
-169.067 [ Info   ][KUKAInterface] filtered_f_z: -0.224025filtered_f_z: -0.430685************* Changed Impedance *************Stiffness: linear: 
-  x: 40
-  y: 40
-  z: 2000
-angular: 
-  x: 300
-  y: 300
-  z: 300
-
-169.067 [ Info   ][KUKAInterface] filtered_f_z: -0.528812
-169.067 [ Info   ][ProactiveAssistance] Msr pos: x: -0.0270376
-y: -0.589529
-z: 0.0461451
-
-170.607 [ Info   ][KUKAInterface] filtered_f_z: -2.90739In Contact!
-170.607 [ Info   ][ProactiveAssistance] Msr pos: x: -0.067879
-y: -0.580154
-z: 0.0452027
-
-172.607 [ Info   ][KUKAInterface] filtered_f_z: -1.53056In Contact!
-172.607 [ Info   ][ProactiveAssistance] Msr pos: x: -0.142803
-y: -0.569642
-z: 0.0448869
-
-174.607 [ Info   ][KUKAInterface] filtered_f_z: -1.26968In Contact!
-174.607 [ Info   ][ProactiveAssistance] Msr pos: x: -0.144377
-y: -0.569252
-z: 0.0448412
-
-176.607 [ Info   ][KUKAInterface] filtered_f_z: -1.38675In Contact!
-176.607 [ Info   ][ProactiveAssistance] Msr pos: x: -0.143659
-y: -0.56947
-z: 0.04485
-
-177.777 [ Info   ][KUKAInterface] ************* Changed Impedance *************Stiffness: linear: 
-  x: 40
-  y: 40
-  z: 40
-angular: 
-  x: 200
-  y: 200
-  z: 200
-
-177.777 [ Info   ][KUKAInterface] filtered_f_z: -0.195133
-177.777 [ Info   ][ProactiveAssistance] Msr pos: x: -0.142817
-y: -0.570064
-z: 0.0456257
-
-199.316 [ Info   ][ExecutionController] filtered_f_z: -0.216568filtered_f_z: -0.1879filtered_f_z: -0.208501filtered_f_z: -0.206819filtered_f_z: -0.22774filtered_f_z: -0.203368filtered_f_z: -0.245956filtered_f_z: -0.226842filtered_f_z: -0.235513filtered_f_z: -0.25934filtered_f_z: -0.266237Time is over
-200.617 [ Info   ][ProactiveAssistance] filtered_f_z: -0.269692
-202.617 [ Info   ][ProactiveAssistance] filtered_f_z: -0.245017
-204.617 [ Info   ][ProactiveAssistance] filtered_f_z: -0.207138
-205.857 [ Info   ][KUKAInterface] Proactive Assistance about to stop!
-205.857 [ Info   ][KUKAInterface] Proactive Assistance stopped
-206.706 [ Info   ][ExecutionController] Reading ExecutorPreperties
-206.706 [ Info   ][ExecutionController] Filename: /home/intelligentrobotics/ws/pbd/Applications/params/ExecutorParameters.txt
-206.710 [ Info   ][ExecutionController] Preparation finished
-206.806 [ Info   ][ExecutionController] Start pos = -0.000523257 -0.593722 0.0526203 -0.997896 0.00608181 0.000189142 0.0645438 Moving to start position, vec len = 7
-206.806 [ Info   ][KUKAInterface] Received start state, vec len = 7
-206.807 [ Info   ][KUKAInterface] boolData: 0 Result: 0
-206.807 [ Info   ][KUKAInterface] === Cartesian PTP motion ===
-206.807 [ Info   ][KUKAInterface] Position:    X:-0.523257 Y:-593.722 Z:52.6203
-206.807 [ Info   ][KUKAInterface] Orientation: A:-0.694077 B:0.0666107 C:-172.599
-209.787 [ Info   ][KUKACommander] Successfully set new control mode: 1
-210.966 [ Info   ][ExecutionController] Start position reached
-210.986 [ Info   ][ExecutionController] Calling for preparation...
-213.017 [ Info   ][KUKACommander] Successfully set new control mode: 2
-213.046 [ Info   ][ExecutionController] Preparation finished
-213.046 [ Info   ][ExecutionController] Executor started
-250.526 [ Info   ][ExecutionController] Time is over
-524.948 [ Info   ][KUKAInterface] Proactive Assistance about to stop!
-524.948 [ Info   ][KUKAInterface] Proactive Assistance stopped
-527.678 [ Info   ][KUKAInterface] Ignoring deployment shutdown function due to missing peer.
-527.679 [ Info   ][DeploymentComponent::stopComponentsGroup] Stopping group 0
-527.686 [ Info   ][DeploymentComponent::stopComponentsGroup] Stopped ExecutionController
-527.688 [ Info   ][DeploymentComponent::stopComponentsGroup] Stopped FRIServer
-527.689 [ ERROR  ][FTSensor] Error while sending stop request to F/T sensor.
-527.689 [ Info   ][DeploymentComponent::stopComponentsGroup] Stopped FTSensor
-527.697 [ Info   ][DeploymentComponent::stopComponentsGroup] Stopped KUKACommander
-527.697 [ Info   ][DeploymentComponent::stopComponentsGroup] Stopped KUKACommanderROS
-527.698 [ Info   ][DeploymentComponent::stopComponentsGroup] Stopped KUKAInterface
-527.698 [ Info   ][DeploymentComponent::stopComponentsGroup] Stopped ProactiveAssistance
-527.698 [ Info   ][DeploymentComponent::cleanupComponentsGroup] Cleaning up group 0
-527.698 [ Info   ][DeploymentComponent::cleanupComponentsGroup] Cleaned up ExecutionController
-527.698 [ Info   ][DeploymentComponent::cleanupComponentsGroup] Cleaned up FRIServer
-527.698 [ Info   ][DeploymentComponent::cleanupComponentsGroup] Cleaned up FTSensor
-527.698 [ Info   ][DeploymentComponent::cleanupComponentsGroup] Cleaned up KUKACommander
-527.698 [ Info   ][DeploymentComponent::cleanupComponentsGroup] Cleaned up KUKACommanderROS
-527.698 [ Info   ][DeploymentComponent::cleanupComponentsGroup] Cleaned up KUKAInterface
-527.699 [ Info   ][DeploymentComponent::cleanupComponentsGroup] Cleaned up ProactiveAssistance
-527.699 [ Info   ][KUKAInterface] Unloading group 0
-527.706 [ Info   ][KUKAInterface] Disconnected and destroyed ExecutionController
-527.711 [ Info   ][KUKAInterface] Disconnected and destroyed FRIServer
-527.714 [ Info   ][KUKAInterface] Disconnected and destroyed FTSensor
-527.717 [ Info   ][KUKAInterface] Disconnected and destroyed KUKACommander
-527.727 [ Info   ][KUKAInterface] Disconnected and destroyed KUKACommanderROS
-527.729 [ Info   ][KUKAInterface] Disconnected and destroyed KUKAInterface
-527.729 [ Info   ][RosPublishActivity] RosPublishActivity cleans up: no more work.
-527.731 [ Info   ][KUKAInterface] Disconnected and destroyed ProactiveAssistance
-527.731 [ Info   ][KUKAInterface] Kick-out of group 0 successful.
-527.732 [ Info   ][KUKAInterface] Orocos Logging Deactivated.
+137.743 [ Info   ][ProactiveAssistance] filtered_f_z: -0.162219
+138.883 [ Info   ][ProactiveAssistance] filtered_f_z: -0.000672336
+140.883 [ Info   ][ProactiveAssistance] filtered_f_z: 0.00969525
+142.883 [ Info   ][ProactiveAssistance] filtered_f_z: 0.0899173
+144.542 [ Info   ][ExecutionController] Execution stopped
+144.883 [ Info   ][ProactiveAssistance] filtered_f_z: 0.163599
+146.883 [ Info   ][ProactiveAssistance] filtered_f_z: 0.171862
+148.883 [ Info   ][ProactiveAssistance] filtered_f_z: 0.135347
+150.883 [ Info   ][ProactiveAssistance] filtered_f_z: 0.117739
+152.503 [ Info   ][KUKACommander] Proactive Assistance about to stop!
+152.503 [ Info   ][KUKACommander] Proactive Assistance stopped
+154.312 [ Info   ][ExecutionController] Reading ExecutorPreperties
+154.312 [ Info   ][ExecutionController] Filename: /home/intelligentrobotics/ws/pbd/Applications/params/ExecutorParameters.txt
+154.319 [ Info   ][ExecutionController] Preparation finished
+154.412 [ Info   ][ExecutionController] Start pos = -0.173454 -0.48671 0.0577387 0.989466 -0.13124 -0.0574415 0.020833 Moving to start position, vec len = 7
+154.413 [ Info   ][KUKAInterface] Received start state, vec len = 7
+154.413 [ Info   ][KUKAInterface] === Cartesian PTP motion ===
+154.413 [ Info   ][KUKAInterface] Position:    X:-173.454 Y:-486.71 Z:57.7387
+154.413 [ Info   ][KUKAInterface] Orientation: A:-15.2871 B:6.21183 C:176.753
+157.363 [ Info   ][KUKACommander] Successfully set new control mode: 1
+158.632 [ Info   ][ExecutionController] Start position reached
+160.782 [ Info   ][ExecutionController] Calling for preparation...
+162.763 [ Info   ][KUKACommander] Successfully set new control mode: 2
+162.782 [ Info   ][ExecutionController] Preparation finished
+162.782 [ Info   ][ExecutionController] Executor started
+204.362 [ Info   ][ExecutionController] Time is over
+300.714 [ Info   ][KUKACommander] Proactive Assistance about to stop!
+300.714 [ Info   ][KUKACommander] Proactive Assistance stopped

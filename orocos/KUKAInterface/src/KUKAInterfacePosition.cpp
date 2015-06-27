@@ -7,7 +7,7 @@
 #include "KUKAInterfacePosition.hpp"
 
 //If used in combination with AssistanceController
-#define ASSISTANCE 0
+#define ASSISTANCE 1
 
 namespace iros {
 namespace orocos {
@@ -32,34 +32,7 @@ using namespace RTT;
 		double stiffnessValue;
 		double dampingValue;
 
-		if (ASSISTANCE) {
-			log(Info)<< "KUKAInterfacePoseForceZ" <<endlog();
-			std::ifstream ifs(
-					"/home/intelligentrobotics/ws/pbd/Applications/params/ComplianceParameters.txt",
-					std::fstream::in);
-			{
-				boost::archive::text_iarchive ia(ifs);
-				ia >> stiffnessValue;
-				ia >> dampingValue;
-			}
-			log(Info) << "Stiffness: " << stiffnessValue << endlog();
-			log(Info) << "Damping: " << dampingValue << endlog();
-
-			stiffness.linear.x = stiffnessValue;
-			stiffness.linear.y = stiffnessValue;
-			stiffness.linear.z = stiffnessValue*10;
-			stiffness.angular.x = 200; 
-			stiffness.angular.y = 200; 
-			stiffness.angular.z = 200;
-
-			damping.linear.x = dampingValue;
-			damping.linear.y = dampingValue;
-			damping.linear.z = dampingValue;
-			damping.angular.x = dampingValue;
-			damping.angular.y = dampingValue;
-			damping.angular.z = dampingValue;
-
-		}else{	
+		if (!ASSISTANCE) {
 			stiffness.linear.x = 2000;
 			stiffness.linear.y = 2000;
 			stiffness.linear.z = 2000;
@@ -97,7 +70,8 @@ using namespace RTT;
 			log(Info) << "Msr rot: " << p_cur.orientation << endlog();
 			log(Info) << "Cmd rot: " << p.orientation << endlog();
 		}
-		setCartesianImpedance(stiffness, damping);
+		if(!ASSISTANCE)
+			setCartesianImpedance(stiffness, damping);
 
 		// Convert position to vector and publish
 		vector<double> state_msr(3);

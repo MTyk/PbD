@@ -1,0 +1,14 @@
+<package>
+    <description brief="Orocos Execution Component package">
+        Pbd DMP Execution Component
+    </description>
+    <license>MIT</license>
+    <author>Franz Steinmetz</author>
+
+    <depend package="rtt" />
+    <depend package="rtt_std_msgs" />
+    <depend package="kuka_lwr_fri" />
+    <depend package="helpers" />
+    <depend package="ExecutionInterface" />
+</package>
+

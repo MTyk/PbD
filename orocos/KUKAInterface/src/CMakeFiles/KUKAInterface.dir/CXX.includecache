@@ -2684,6 +2684,18 @@ KUKAInterfacePose.hpp
 KUKAInterfacePosition.hpp
 /home/intelligentrobotics/ws/orocos/pbd/KUKAInterface/src/KUKAInterfacePosition.hpp
 
+/home/intelligentrobotics/ws/orocos/pbd/KUKAInterface/src/KUKAInterfacePosition.cpp
+rtt/RTT.hpp
+-
+rtt/Component.hpp
+-
+boost/archive/text_iarchive.hpp
+-
+fstream
+-
+KUKAInterfacePosition.hpp
+/home/intelligentrobotics/ws/orocos/pbd/KUKAInterface/src/KUKAInterfacePosition.hpp
+
 /home/intelligentrobotics/ws/orocos/pbd/KUKAInterface/src/KUKAInterfacePosition.hpp
 KUKAInterface.hpp
 /home/intelligentrobotics/ws/orocos/pbd/KUKAInterface/src/KUKAInterface.hpp

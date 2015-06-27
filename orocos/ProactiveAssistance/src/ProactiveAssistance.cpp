@@ -7,8 +7,8 @@
 #include <std_msgs/Float32.h>
 
 #define FORCE_FACTOR -1.5
-#define TORQUE_FACTOR -0.2
-#define FORCE_LIMIT 25.0
+#define TORQUE_FACTOR 0.0
+#define FORCE_LIMIT 100.0
 #define TORQUE_LIMIT 2.5
 #define NUMJOINTS 7
 
@@ -16,7 +16,7 @@
 
 namespace iros {
 
-bool isStarted = true;
+bool isStarted = false;
 geometry_msgs::Pose last_pose_in_m;
 std_msgs::Float32 last_timestamp;
 KDL::Vector last_velocity;
@@ -150,12 +150,12 @@ void ProactiveAssistance::updateHook() {
 		imp_update_counter++;	
 	
 		//Setting the damping
-		damping.linear.x = 0.1;
-		damping.linear.y = 0.1;
-		damping.linear.z = 0.1;
-		damping.angular.x = 0.1;
-		damping.angular.y = 0.1;
-		damping.angular.z = 0.1;
+		damping.linear.x = 0.7;
+		damping.linear.y = 0.7;
+		damping.linear.z = 0.7;
+		damping.angular.x = 0.7;
+		damping.angular.y = 0.7;
+		damping.angular.z = 0.7;
 
 		static geometry_msgs::Pose init_pose = current_pose;
 
@@ -176,6 +176,7 @@ void ProactiveAssistance::updateHook() {
 				}
 				return;
 			}
+				// setCartesianImpedance(stiffness, damping);
 
 			KDL::Vector current_acceleration;
 			if(imp_update_counter%100==0){
@@ -265,25 +266,25 @@ void ProactiveAssistance::updateHook() {
 				//High stiffness for angular movement to avoid turning of the tool
 				stiffness.linear.x = current_impedance.linear.x;
 				stiffness.linear.y = current_impedance.linear.y;
-				stiffness.linear.z = 2000;
+				stiffness.linear.z = 4000;
 				stiffness.angular.x = 300;
 				stiffness.angular.y = 300;
 				stiffness.angular.z = 300;
 			}else{
-				in_contact_thresh = -0.5;
+				in_contact_thresh = -1.0;
 				stiffness.linear.x = current_impedance.linear.x;
 				stiffness.linear.y = current_impedance.linear.y;
 				stiffness.linear.z = current_impedance.linear.z;
-				stiffness.angular.x = 200;
-				stiffness.angular.y = 200;
-				stiffness.angular.z = 200;
+				stiffness.angular.x = 300;
+				stiffness.angular.y = 300;
+				stiffness.angular.z = 300;
 
 				addWrench.force.x = current_kuka_wrench.force.x * force_factor_x;
 				addWrench.force.y = current_kuka_wrench.force.y * force_factor_y;
 				addWrench.force.z = current_kuka_wrench.force.z * force_factor_z;
 				addWrench.torque.x = current_kuka_wrench.torque.x * torque_factor_x;
 				addWrench.torque.y = current_kuka_wrench.torque.y * torque_factor_y;
-				addWrench.torque.z = current_kuka_wrench.torque.z * torque_factor_z;		
+				addWrench.torque.z = current_kuka_wrench.torque.z * torque_factor_z;
 			}
 
 			if(stiffness.linear.z!=current_stiffness_z){
@@ -403,7 +404,6 @@ void ProactiveAssistance::startAssistance(RTT::base::PortInterface*) {
 void ProactiveAssistance::stopAssistance(RTT::base::PortInterface*) {
 	log(Info) << "Proactive Assistance about to stop!" << endlog();
 	isStarted = false;
-	;
 	port_isstopped_assistance.write(std_msgs::Empty { });
 	log(Info) << "Proactive Assistance stopped" << endlog();
 }

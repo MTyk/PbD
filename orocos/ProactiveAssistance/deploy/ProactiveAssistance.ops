@@ -122,9 +122,12 @@ connect("FRIServer.FRIState", "KUKAInterface.friState", cp)
 connect("KUKAInterface.prepared", "ExecutionController.in_prepared", cp)
 connect("KUKAInterface.start_pos_reached", "ExecutionController.in_start_pos_reached", cp)
 
+stream("FRIServer.desCartImpedance", ros.topic("/iros/pbd/desCartImpedance"))
 stream("FRIServer.msrJointState", ros.topic("/iros/pbd/dmp/JointPos")) 
 stream("FRIServer.msrCartPos", ros.topic("/iros/pbd/dmp/CartPose"))
 stream("FTSensor.ForcePort", ros.topic("/iros/pbd/dmp/FTForce"))
+
+stream("KUKAInterface.desPosition", ros.topic("/iros/pbd/desCartPos"))
 
 stream("ExecutionController.out_prepared", ros.topic("/iros/pbd/dmp/execution/interface/prepared"))
 stream("ExecutionController.out_finished", ros.topic("/iros/pbd/dmp/execution/interface/finished"))
@@ -134,6 +137,7 @@ stream("ExecutionController.prepare", ros.topic("/iros/pbd/dmp/execution/interfa
 stream("ExecutionController.start", ros.topic("/iros/pbd/dmp/execution/interface/start"))
 stream("ExecutionController.stop", ros.topic("/iros/pbd/dmp/execution/interface/stop"))
 stream("ExecutionController.startPosition", ros.topic("/iros/pbd/dmp/execution/interface/startPosition"))
+stream("ExecutionController.haltExecution", ros.topic("/iros/pbd/dmp/execution/halt"))
 
 stream("ProactiveAssistance.impedance", ros.topic("/iros/pbd/impedance"));
 
